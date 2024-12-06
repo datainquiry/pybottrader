@@ -19,7 +19,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install pdoc
-        run: pip install pdoc
+        run: pip install pdoc attrs
 
       - name: Generate Documentation
         run: pdoc src/pybottrader --output-dir docs
