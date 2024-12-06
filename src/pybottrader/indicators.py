@@ -41,17 +41,21 @@ class MA:
             return np.nan
         return self.accum / self.period
 
+
 class EMA:
     """Exponential Moving Average"""
+
     periods: float
     alpha: float
     smooth_factor: float
     length: int = 0
     prev: float = 0.0
-    def __init__(self, periods: int, alpha = 2.0):
+
+    def __init__(self, periods: int, alpha=2.0):
         self.periods = periods
         self.alpha = alpha
         self.smooth_factor = alpha / (1.0 + periods)
+
     def update(self, value: float) -> float:
         """Aggregate a new value into the moving average"""
         self.length += 1
@@ -61,15 +65,17 @@ class EMA:
             self.prev += value
             self.prev /= self.periods
         else:
-            self.prev = (value * self.smooth_factor) + self.prev * (1.0 - self.smooth_factor)
+            self.prev = (value * self.smooth_factor) + self.prev * (
+                1.0 - self.smooth_factor
+            )
         return self.get()
-
 
     def get(self) -> float:
         """Current output of the moving average"""
         if self.length < self.periods:
             return np.nan
         return self.prev
+
 
 def roi(initial_value, final_value):
     """Return on investment"""

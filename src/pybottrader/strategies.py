@@ -2,6 +2,7 @@
 
 from enum import Enum
 
+
 class Position(Enum):
     """Trading Positions"""
 
@@ -24,6 +25,3 @@ class Strategy:
         """
         # The default position is STAY
         return Position.STAY
-
-
-
