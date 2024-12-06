@@ -3,8 +3,6 @@ TRADING PORTFOLIO MODELS
 
 This module has beed adapted from:
 https://github.com/jailop/trading/tree/main/indicators-c%2B%2B
-
-(c) 2024 Feeneylab
 """
 
 from .strategies import Position
