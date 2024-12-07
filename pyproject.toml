@@ -1,6 +1,8 @@
 [project]
 name = "pybottrader"
 version = "0.0.3"
+readme = "README.md"
+description = "An experimental Python library to implement trading bots"
 dependencies = [
     "attrs",
     "pandas",
