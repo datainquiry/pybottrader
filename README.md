@@ -10,24 +10,24 @@ Features:
 
 - Financial indicators for streaming data. They don´t make calculations from
   scratch but instead by keeping memory of previous results (intended to be use
-  with real time data). A `update` method is used to update their results. They
-  use a bracket notation to bring access to results, like ind[0] for the most
-  recent result and ind[-1] for the previous one. Current implemented indicators
-  are MA (simple moving average), EMA (exponential moving average), and ROI
-  (return of investment).
-- Data streamers to read or retrieve sequential data. They provided a `next`
-  method to bring access the next data item. Current data streamers implemented:
+  with real time data). An `update` method is used to push new data and update
+  their results. They use a bracket notation to bring access to results, like
+  `ind[0]` for the most recent result and `ind[-1]` for the previous one. Current
+  implemented indicators are `MA` (simple moving average), `EMA` (exponential moving
+  average), and `ROI` (return of investment).
+- Data streamers to read or retrieve sequential data. They provide a `next`
+  method to bring access to the next data item. Current data streamers implemented:
   `CSVFileStreamer` and `YFinanceStreamer` (based on the `yfinace` library.)
-- Portfolio managers to implement buy and sell policies and deliver orders.
-  Currently only the `DummyPortfolio` is implemented, one that when receives a
+- Portfolio managers, to implement buy/sell policies and deliver orders.
+  Currently only a `DummyPortfolio` is implemented, one that when receives a
   `buy` signal buys everything that it can with its available cash, and sells
-  all its assets when receives a `sell` signal. This portfolio is used for
+  all its assets when receives a `sell` signal. This portfolio can be used for
   back-testing.
 - A strategy model, so the user of this library can implement it owns strategy.
-  The purpose of a strategy is to consume a data streamer and produce BUY/SELL
+  The purpose of a strategy is to consume a data stream and produce BUY/SELL
   signals.
-- Traders, that are bot the based on a data stream, a strategy, and a portfolio,
-  run the trading operations. Currently only a base Trader is offered, useful
+- Traders, these are bot the based on a data stream, a strategy, and a portfolio,
+  run the trading operations. Currently only a basic Trader is offered, useful
   for back-testing.
 
 Using this library looks like:
@@ -58,4 +58,4 @@ trader = Trader(strategy, portfolio, datastream)
 trader.run()
 ```
 
-Shortly, I'm going to release the documentation and examples.
+Shortly, I'm going to release more documentation and examples.
