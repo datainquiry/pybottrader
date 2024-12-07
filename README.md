@@ -33,7 +33,7 @@ Features:
 
 Using this library looks like:
 
-```
+``` python
 from pybottrader.datastreamers import YFinanceStreamer
 from pybottrader.portfolios import DummyPortfolio
 from pybottrader.traders import Trader
@@ -56,7 +56,9 @@ datastream = YFinanceStreamer("AAPL", period="1y")
 portfolio = DummyPortfolio(1000)  # Initial cash
 strategy = MyStragety()
 trader = Trader(strategy, portfolio, datastream)
-trader.run()
+
+while trader.next():
+    print(trader.status())
 ```
 
 Shortly, I'm going to release more documentation and examples.
