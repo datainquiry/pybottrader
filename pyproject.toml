@@ -1,9 +1,10 @@
 [project]
 name = "pybottrader"
-version = "0.0.1"
+version = "0.0.3"
 dependencies = [
     "attrs",
     "pandas",
+    "yfinance",
 ]
 
 [tool.setuptools]
