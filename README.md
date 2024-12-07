@@ -26,7 +26,7 @@ Features:
 - A strategy model, so the user of this library can implement it owns strategy.
   The purpose of a strategy is to consume a data stream and produce BUY/SELL
   signals.
-- Traders, these are bot the based on a data stream, a strategy, and a portfolio,
+- Traders, these are bots that based on a data stream, a strategy, and a portfolio,
   run the trading operations. Currently only a basic Trader is offered, useful
   for back-testing.
 
