@@ -1,71 +1,61 @@
 # PyBotTrader
 
-An experimental Python library to implement trading bots.
+Version 0.0.3
 
-## Indicators
+An experimental Python library to implement trading bots. I'm building this
+library based on patterns I've observed implementing trading algorithms for my
+clients. It is intended, when it becomes stable, to be used by retail traders.
 
-### **Components**
+Features:
 
-#### **Base Class: `Indicator`**
-The `Indicator` class provides a generic structure to maintain a circular buffer of recent values, with the following features:
-- **Memory Buffer (`mem_data`)**: Stores the last `mem_size` values in a circular fashion.
-- **Indexing**: Supports time-series indexing where `0` refers to the most recent value, and negative indices go further back in time.
-- **Value Management**:
-  - `push(value)`: Adds a new value to the buffer as the latest entry.
-  - `__getitem__(key)`: Accesses a value by index, returning `NaN` for out-of-bounds indices.
-  - `get(key)`: Retrieves a value similar to `__getitem__`.
+- Financial indicators for streaming data. They don´t make calculations from
+  scratch but instead by keeping memory of previous results (intended to be use
+  with real time data). A `update` method is used to update their results. They
+  use a bracket notation to bring access to results, like ind[0] for the most
+  recent result and ind[-1] for the previous one. Current implemented indicators
+  are MA (simple moving average), EMA (exponential moving average), and ROI
+  (return of investment).
+- Data streamers to read or retrieve sequential data. They provided a `next`
+  method to bring access the next data item. Current data streamers implemented:
+  `CSVFileStreamer` and `YFinanceStreamer` (based on the `yfinace` library.)
+- Portfolio managers to implement buy and sell policies and deliver orders.
+  Currently only the `DummyPortfolio` is implemented, one that when receives a
+  `buy` signal buys everything that it can with its available cash, and sells
+  all its assets when receives a `sell` signal. This portfolio is used for
+  back-testing.
+- A strategy model, so the user of this library can implement it owns strategy.
+  The purpose of a strategy is to consume a data streamer and produce BUY/SELL
+  signals.
+- Traders, that are bot the based on a data stream, a strategy, and a portfolio,
+  run the trading operations. Currently only a base Trader is offered, useful
+  for back-testing.
 
----
+Using this library looks like:
 
-#### **Derived Classes**
+```
+from pybottrader.datastreamers import YFinanceStreamer
+from pybottrader.portfolios import DummyPortfolio
+from pybottrader.traders import Trader
+from pybottrader.strategies import Strategy, Position
 
-1. **`MA` (Moving Average)**
-   - Computes a Simple Moving Average (SMA) over a specified period (`period`).
-   - Maintains an internal buffer (`prevs`) to track the last `period` values.
-   - **Method**:
-     - `update(value)`: Adds a new value, recalculates the SMA, and pushes the result into the buffer.
+class MyStragety(Strategy):
+    def __init__(self, ...):
+        # Initilize your stuff
+    def evaluate(self, *args, **kwargs) -> Position:
+        # This method receives data sent by the data streamer
+        # and computes signals
+        if cond:
+            return Position.BUY
+        else if cond:
+            return Position.SELL
+        else:
+            return Position.STAY
 
-2. **`EMA` (Exponential Moving Average)**
-   - Calculates an EMA with smoothing controlled by `alpha` or a computed factor based on the `periods` parameter.
-   - The EMA gives more weight to recent data for responsiveness to changes.
-   - **Method**:
-     - `update(value)`: Updates the EMA calculation with a new value and stores the result in the buffer.
-
-3. **`ROI` (Return on Investment)**
-   - Measures the return on investment (ROI) as a percentage change between two consecutive values.
-   - Requires at least one previous value to compute ROI.
-   - **Method**:
-     - `update(value)`: Computes the ROI from the previous value to the current value and updates the buffer.
-
----
-
-#### **Helper Function: `roi(initial_value, final_value)`**
-- Computes the return on investment using the formula:
-  \[
-  \text{ROI} = \frac{\text{final value}}{\text{initial value}} - 1.0
-  \]
-- Returns `NaN` if the initial value is zero or undefined.
-
----
-
-### **Key Features**
-- **Efficient Memory Management**: Uses a ring buffer to limit memory usage while retaining recent values.
-- **Flexibility**: Designed for streaming time-series data, allowing on-the-fly updates.
-- **Extensibility**: The base class `Indicator` can be extended to implement new indicators.
-- **Error Handling**: Provides `NaN` for invalid indices or calculations, ensuring robustness.
-
----
-
-### **Usage Example**
-```python
-# Initialize a Moving Average with a buffer size of 10 and a period of 3
-ma = MA(period=3, mem_size=10)
-
-# Update with new values
-print(ma.update(10))  # Output: NaN (not enough data points yet)
-print(ma.update(12))  # Output: NaN
-print(ma.update(14))  # Output: 12.0 (average of 10, 12, 14)
-print(ma[0])          # Output: 12.0 (most recent value)
+datastream = YFinanceStreamer("AAPL", period="1y")
+portfolio = DummyPortfolio(1000)  # Initial cash
+strategy = MyStragety()
+trader = Trader(strategy, portfolio, datastream)
+trader.run()
 ```
 
-This modular design is ideal for financial applications, where efficient and dynamic calculations of indicators are essential.
+Shortly, I'm going to release the documentation and examples.
