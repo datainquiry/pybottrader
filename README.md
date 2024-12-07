@@ -14,7 +14,8 @@ Features:
   their results. They use a bracket notation to bring access to results, like
   `ind[0]` for the most recent result and `ind[-1]` for the previous one. Current
   implemented indicators are `MA` (simple moving average), `EMA` (exponential moving
-  average), and `ROI` (return of investment).
+  average), and `ROI` (return of investment). Check some examples in [this test
+  file](https://github.com/jailop/pybottrader/blob/main/test/test_indicators.py).
 - Data streamers to read or retrieve sequential data. They provide a `next`
   method to bring access to the next data item. Current data streamers implemented:
   `CSVFileStreamer` and `YFinanceStreamer` (based on the `yfinace` library.)
