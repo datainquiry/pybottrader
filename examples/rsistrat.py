@@ -23,11 +23,11 @@ class SimpleRSIStrategy(Strategy):
         # Update the RSI indicator
         self.rsi.update(open_price=kwargs["open"], close_price=kwargs["close"])
         # If RSI is less than 30, buy
-        if self.last_flip == Position.SELL and self.rsi[0] < 30:
+        if self.last_flip == Position.SELL and self.rsi[0] < 30.0:
             position = Position.BUY
             self.last_flip = Position.BUY
         # If RSI is greater than 70, sell
-        elif self.last_flip == Position.BUY and self.rsi[0] > 70:
+        elif self.last_flip == Position.BUY and self.rsi[0] > 70.0:
             position = Position.SELL
             self.last_flip = Position.SELL
         return position

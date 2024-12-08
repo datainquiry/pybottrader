@@ -8,7 +8,7 @@ An experimental Python library to implement trading bots. I'm building this
 library based on patterns I've observed implementing trading algorithms for my
 clients. It is intended, when it becomes stable, to be used by retail traders.
 
-Features:
+## Features
 
 - Financial indicators for streaming data. They don´t make calculations from
   scratch but instead by keeping memory of previous results (intended to be use
@@ -35,6 +35,8 @@ Features:
 - Traders, these are bots that based on a data stream, a strategy, and a
   portfolio, run the trading operations. Currently only a basic Trader is
   offered, useful for back-testing.
+
+## Example
 
 Using this library looks like:
 
@@ -119,6 +121,12 @@ Date       Pos.      Price        ROI   Valuation  Accum.ROI
 2023-01-24 SELL     141.05      -8.37%     957.52      -4.25%
 2023-08-04 BUY      180.62       0.00%     957.52      -4.25%
 2023-10-10 SELL     177.29      -1.85%     939.85      -6.02%
+```
+
+## Installation
+
+```sh
+pip install pybottrader
 ```
 
 Shortly, I'm going to release more documentation and more examples.
