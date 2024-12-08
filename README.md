@@ -1,7 +1,5 @@
 # PyBotTrader
 
-Version 0.0.4
-
 API Documentation <https://jailop.github.io/pybottrader/pybottrader.html>
 
 An experimental Python library to implement trading bots. I'm building this
