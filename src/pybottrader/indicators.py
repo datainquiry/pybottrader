@@ -5,6 +5,7 @@ https://github.com/jailop/trading/tree/main/indicators-c++
 """
 
 import numpy as np
+from attrs import define
 
 
 class Indicator:
@@ -27,7 +28,7 @@ class Indicator:
     """
 
     mem_pos: int
-    mem_data: np.ndarray
+    mem_data: list
     mem_size: int
 
     def __init__(self, mem_size=1):
@@ -35,8 +36,7 @@ class Indicator:
         @param mem_size: The size of the memory buffer. The
             default value is 1.
         """
-        self.mem_data = np.empty((mem_size,))
-        self.mem_data[:] = np.nan
+        self.mem_data = [np.nan] * mem_size
         self.mem_pos = 0
         self.mem_size = mem_size
 
@@ -106,32 +106,32 @@ class MA(Indicator):
 class EMA(Indicator):
     """Exponential Moving Average"""
 
-    periods: float
+    period: float
     alpha: float
     smooth_factor: float
     length: int = 0
     prev: float = 0.0
 
-    def __init__(self, periods: int, *args, **kwargs):
+    def __init__(self, period: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
         alpha = 2.0 if "alpha" not in kwargs else kwargs["alpha"]
-        self.periods = periods
+        self.period = period
         self.alpha = alpha
-        self.smooth_factor = alpha / (1.0 + periods)
+        self.smooth_factor = alpha / (1.0 + period)
 
     def update(self, value: float) -> float:
         """Aggregate a new value into the moving average"""
         self.length += 1
-        if self.length < self.periods:
+        if self.length < self.period:
             self.prev += value
-        elif self.length == self.periods:
+        elif self.length == self.period:
             self.prev += value
-            self.prev /= self.periods
+            self.prev /= self.period
         else:
             self.prev = (value * self.smooth_factor) + self.prev * (
                 1.0 - self.smooth_factor
             )
-        if self.length < self.periods:
+        if self.length < self.period:
             self.push(np.nan)
         else:
             self.push(self.prev)
@@ -159,6 +159,71 @@ class ROI(Indicator):
         curr = roi(self.prev, value)
         self.push(curr)
         self.prev = value
+        return self[0]
+
+
+class RSI(Indicator):
+    gains: MA
+    losses: MA
+
+    def __init__(self, period: int = 14, **kwargs):
+        args = []
+        super().__init__(*args, **kwargs)
+        self.gains = MA(period=period)
+        self.losses = MA(period=period)
+
+    def update(self, open_price: float, close_price: float) -> float:
+        diff = close_price - open_price
+        self.gains.update(diff if diff > 0.0 else 0.0)
+        self.losses.update(-diff if diff < 0.0 else 0.0)
+        if np.isnan(self.losses[0]):
+            self.push(np.nan)
+        else:
+            self.push(100.0 - 100.0 / (1 + self.gains[0] / self.losses[0]))
+        return self[0]
+
+
+@define
+class MACDResult:
+    macd: float
+    signal: float
+    hist: float
+
+
+class MACD(Indicator):
+
+    short: EMA
+    long: EMA
+    diff: EMA
+    start: int
+    counter = 0
+
+    def __init__(
+        self,
+        short_period: float,
+        long_period: float,
+        diff_period: float,
+        *args,
+        **kwargs
+    ):
+        args = []
+        super().__init__(*args, **kwargs)
+        self.short = EMA(period=short_period, *args, **kwargs)
+        self.long = EMA(period=long_period, *args, **kwargs)
+        self.diff = EMA(period=diff_period, *args, **kwargs)
+        self.start = long_period if long_period > short_period else short_period
+
+    def update(self, value: float) -> float:
+        self.counter += 1
+        self.short.update(value)
+        self.long.update(value)
+        if self.counter >= self.start:
+            diff = self.short[0] - self.long[0]
+            self.diff.update(diff)
+            hist = diff - self.diff[0]
+            self.push(MACDResult(macd=diff, signal=self.diff[0], hist=hist))
+        else:
+            self.push(MACDResult(macd=np.nan, signal=np.nan, hist=np.nan))
         return self[0]
 
 

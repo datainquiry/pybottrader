@@ -1,15 +1,19 @@
-0.0.1 2024-12-06
+v0.0.1 2024-12-06
 
 - First version
 
-0.0.2 2024-12-06
+v0.0.2 2024-12-06
 
 - YFinanceStreamer added
 
-0.0.3 2024-12-07
+v0.0.3 2024-12-07
 
 - Array notation introduced for indicators. Indices should be going 0, -1, -2,
   -3..., where 0 is the current value.
 - Indicators can keep memory of the most recent values, setting the `mem_size`
-  argument. The default value is 1, i.e. by default only keeps the current
-  value.
+  argument. The default value is 1, i.e. by default only keeps the current value.
+
+v0.0.4 2024-12-07
+
+- RSI and MACD indicators added
+- A complete example included
