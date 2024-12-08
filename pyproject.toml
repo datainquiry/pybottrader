@@ -1,6 +1,5 @@
 [project]
 name = "pybottrader"
-version = "0.0.5"
 dynamic = ["version"]
 readme = "README.md"
 description = "An experimental Python library to implement trading bots"
