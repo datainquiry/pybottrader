@@ -1,6 +1,8 @@
 """Strategies"""
 
 from enum import Enum
+from datetime import datetime
+from attrs import define
 
 
 class Position(Enum):
@@ -11,6 +13,17 @@ class Position(Enum):
     SELL = 3
 
 
+@define
+class StrategySignal:
+    """To report computations of an strategy"""
+
+    time: datetime = datetime.now()
+    position: Position = Position.STAY
+    price: float = 0.0
+    ticker: str = ""
+    exchange: str = ""
+
+
 class Strategy:
     """Base class for strategies"""
 
@@ -19,9 +32,9 @@ class Strategy:
         Init Method. Included for future support.
         """
 
-    def evaluate(self, *args, **kwargs) -> Position:
+    def evaluate(self, *args, **kwargs) -> StrategySignal:
         """
         Evaluate method. Include for future support
         """
         # The default position is STAY
-        return Position.STAY
+        return StrategySignal()

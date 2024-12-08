@@ -3,3 +3,6 @@ doc:
 
 format:
 	black .
+
+test:
+	pytest tests

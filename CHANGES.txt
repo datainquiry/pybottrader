@@ -17,3 +17,8 @@ v0.0.4 2024-12-07
 
 - RSI and MACD indicators added
 - A complete example included
+
+v0.0.5 2024-12-08
+
+- Strategy returs a StrategySignal result. This include fields like price,
+  position, and time.

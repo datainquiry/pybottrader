@@ -1,13 +1,24 @@
 [project]
 name = "pybottrader"
-version = "0.0.4"
+version = "0.0.5"
+dynamic = ["version"]
 readme = "README.md"
 description = "An experimental Python library to implement trading bots"
+mantainers = [
+    {name = "Jaime Lopez", email = "jailop AT protonmail DOT com"},
+]
+license = {file = "LICENSE"}
+keywords = ["trading", "bots", "finance"]
 dependencies = [
     "attrs",
+    "numpy",
     "pandas",
     "yfinance",
 ]
+
+[project.urls]
+Documentation = "https://jailop.github.io/pybottrader/pybottrader.html"
+Repository = "https://github.com/jailop/pybottrader"
 
 [tool.setuptools]
 package-dir={"" = "src"}

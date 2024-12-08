@@ -31,6 +31,30 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
+                    <a class="class" href="#TradingIteration">TradingIteration</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#TradingIteration.__init__">TradingIteration</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#TradingIteration.signal">signal</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#TradingIteration.data">data</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#TradingIteration.roi">roi</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#TradingIteration.portfolio_value">portfolio_value</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#TradingIteration.accumulated_roi">accumulated_roi</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#Trader">Trader</a>
                             <ul class="memberlist">
                         <li>
@@ -89,69 +113,196 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;A collection of bottraders&quot;&quot;&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">.datastreamers</span> <span class="kn">import</span> <span class="n">DataStreamer</span><span class="p">,</span> <span class="n">StreamIteration</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span> <span class="nn">.portfolios</span> <span class="kn">import</span> <span class="n">Portfolio</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">.strategies</span> <span class="kn">import</span> <span class="n">Strategy</span><span class="p">,</span> <span class="n">Position</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span> <span class="nn">.indicators</span> <span class="kn">import</span> <span class="n">roi</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span> <span class="nc">Trader</span><span class="p">:</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class&quot;&quot;&quot;</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">last_result</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">StreamIteration</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">last_valuation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span><span class="p">,</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span><span class="p">,</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span><span class="p">,</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="p">):</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Init method&quot;&quot;&quot;</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span> <span class="o">=</span> <span class="n">datastream</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">portfolio</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">**</span><span class="n">obs</span><span class="p">)</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">])</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span> <span class="o">=</span> <span class="n">StreamIteration</span><span class="p">(</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>            <span class="n">time</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>            <span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>            <span class="n">roi</span><span class="o">=</span><span class="n">roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()),</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>            <span class="n">portfolio_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">(),</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>            <span class="n">accumulated_roi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">accumulated_return</span><span class="p">(),</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="p">)</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamIteration</span><span class="p">:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Trader last result&quot;&quot;&quot;</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>            <span class="c1"># Printing status after BUY or SELL</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>            <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">position</span> <span class="o">!=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span><span class="p">:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>                <span class="nb">print</span><span class="p">(</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">  &quot;</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">name</span><span class="si">:</span><span class="s2">5</span><span class="si">}</span><span class="s2">  &quot;</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> USD  &quot;</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;ROI </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2"> %  &quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>                    <span class="sa">f</span><span class="s2">&quot;Accum. ROI </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">accumulated_roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>                <span class="p">)</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">define</span><span class="p">,</span> <span class="n">asdict</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span> <span class="nn">.datastreamers</span> <span class="kn">import</span> <span class="n">DataStreamer</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span> <span class="nn">.portfolios</span> <span class="kn">import</span> <span class="n">Portfolio</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span> <span class="nn">.strategies</span> <span class="kn">import</span> <span class="n">Strategy</span><span class="p">,</span> <span class="n">Position</span><span class="p">,</span> <span class="n">StrategySignal</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span> <span class="nn">.indicators</span> <span class="kn">import</span> <span class="n">roi</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="nd">@define</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span> <span class="nc">TradingIteration</span><span class="p">:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to report results from a trading iteration&quot;&quot;&quot;</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">signal</span><span class="p">:</span> <span class="n">StrategySignal</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">roi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">portfolio_value</span><span class="p">:</span> <span class="nb">float</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">accumulated_roi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="k">class</span> <span class="nc">Trader</span><span class="p">:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class&quot;&quot;&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">last_result</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TradingIteration</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">last_valuation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span><span class="p">,</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>        <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span><span class="p">,</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span><span class="p">,</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="p">):</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Init method&quot;&quot;&quot;</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span> <span class="o">=</span> <span class="n">datastream</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">portfolio</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perfoms a trading iteration&quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">**</span><span class="n">obs</span><span class="p">)</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="o">**</span><span class="n">asdict</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span> <span class="o">=</span> <span class="n">TradingIteration</span><span class="p">(</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>            <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="n">roi</span><span class="o">=</span><span class="n">roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()),</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>            <span class="n">portfolio_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">(),</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>            <span class="n">accumulated_roi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">accumulated_return</span><span class="p">(),</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="p">)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TradingIteration</span><span class="p">:</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Trader last result&quot;&quot;&quot;</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A default runner&quot;&quot;&quot;</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="c1"># A nice header</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="nb">print</span><span class="p">(</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>            <span class="s2">&quot;</span><span class="si">{:26}</span><span class="s2"> </span><span class="si">{:4}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2">  </span><span class="si">{:&gt;10}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>  <span class="c1"># pylint: disable=consider-using-f-string</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>                <span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="s2">&quot;Pos.&quot;</span><span class="p">,</span> <span class="s2">&quot;Price&quot;</span><span class="p">,</span> <span class="s2">&quot;ROI&quot;</span><span class="p">,</span> <span class="s2">&quot;Valuation&quot;</span><span class="p">,</span> <span class="s2">&quot;Accum.ROI&quot;</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>            <span class="p">)</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="p">)</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="c1"># Run the back-testing</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">position</span> <span class="o">!=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span><span class="p">:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>                <span class="c1"># A nice output</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>                <span class="nb">print</span><span class="p">(</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">name</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2">% </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">portfolio_value</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">accumulated_roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2">%&quot;</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>                <span class="p">)</span>
 </span></pre></div>
 
 
             </section>
+                <section id="TradingIteration">
+                            <input id="TradingIteration-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+                    <div class="decorator decorator-define">@define</div>
+
+    <span class="def">class</span>
+    <span class="name">TradingIteration</span>:
+
+                <label class="view-source-button" for="TradingIteration-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#TradingIteration"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TradingIteration-13"><a href="#TradingIteration-13"><span class="linenos">13</span></a><span class="nd">@define</span>
+</span><span id="TradingIteration-14"><a href="#TradingIteration-14"><span class="linenos">14</span></a><span class="k">class</span> <span class="nc">TradingIteration</span><span class="p">:</span>
+</span><span id="TradingIteration-15"><a href="#TradingIteration-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to report results from a trading iteration&quot;&quot;&quot;</span>
+</span><span id="TradingIteration-16"><a href="#TradingIteration-16"><span class="linenos">16</span></a>
+</span><span id="TradingIteration-17"><a href="#TradingIteration-17"><span class="linenos">17</span></a>    <span class="n">signal</span><span class="p">:</span> <span class="n">StrategySignal</span>
+</span><span id="TradingIteration-18"><a href="#TradingIteration-18"><span class="linenos">18</span></a>    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>
+</span><span id="TradingIteration-19"><a href="#TradingIteration-19"><span class="linenos">19</span></a>    <span class="n">roi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</span><span id="TradingIteration-20"><a href="#TradingIteration-20"><span class="linenos">20</span></a>    <span class="n">portfolio_value</span><span class="p">:</span> <span class="nb">float</span>
+</span><span id="TradingIteration-21"><a href="#TradingIteration-21"><span class="linenos">21</span></a>    <span class="n">accumulated_roi</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Used to report results from a trading iteration</p>
+</div>
+
+
+                            <div id="TradingIteration.__init__" class="classattr">
+                                        <input id="TradingIteration.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="name">TradingIteration</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">signal</span><span class="p">:</span> <span class="n"><a href="strategies.html#StrategySignal">pybottrader.strategies.StrategySignal</a></span>,</span><span class="param">	<span class="n">data</span><span class="p">:</span> <span class="nb">dict</span>,</span><span class="param">	<span class="n">roi</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>,</span><span class="param">	<span class="n">portfolio_value</span><span class="p">:</span> <span class="nb">float</span>,</span><span class="param">	<span class="n">accumulated_roi</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span></span>)</span>
+
+                <label class="view-source-button" for="TradingIteration.__init__-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#TradingIteration.__init__"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TradingIteration.__init__-2"><a href="#TradingIteration.__init__-2"><span class="linenos">2</span></a><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">portfolio_value</span><span class="p">,</span> <span class="n">accumulated_roi</span><span class="p">):</span>
+</span><span id="TradingIteration.__init__-3"><a href="#TradingIteration.__init__-3"><span class="linenos">3</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">signal</span>
+</span><span id="TradingIteration.__init__-4"><a href="#TradingIteration.__init__-4"><span class="linenos">4</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+</span><span id="TradingIteration.__init__-5"><a href="#TradingIteration.__init__-5"><span class="linenos">5</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">roi</span> <span class="o">=</span> <span class="n">roi</span>
+</span><span id="TradingIteration.__init__-6"><a href="#TradingIteration.__init__-6"><span class="linenos">6</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">portfolio_value</span> <span class="o">=</span> <span class="n">portfolio_value</span>
+</span><span id="TradingIteration.__init__-7"><a href="#TradingIteration.__init__-7"><span class="linenos">7</span></a>    <span class="bp">self</span><span class="o">.</span><span class="n">accumulated_roi</span> <span class="o">=</span> <span class="n">accumulated_roi</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Method generated by attrs for class TradingIteration.</p>
+</div>
+
+
+                            </div>
+                            <div id="TradingIteration.signal" class="classattr">
+                                <div class="attr variable">
+            <span class="name">signal</span><span class="annotation">: <a href="strategies.html#StrategySignal">pybottrader.strategies.StrategySignal</a></span>
+
+        
+    </div>
+    <a class="headerlink" href="#TradingIteration.signal"></a>
+    
+    
+
+                            </div>
+                            <div id="TradingIteration.data" class="classattr">
+                                <div class="attr variable">
+            <span class="name">data</span><span class="annotation">: dict</span>
+
+        
+    </div>
+    <a class="headerlink" href="#TradingIteration.data"></a>
+    
+    
+
+                            </div>
+                            <div id="TradingIteration.roi" class="classattr">
+                                <div class="attr variable">
+            <span class="name">roi</span><span class="annotation">: Optional[float]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#TradingIteration.roi"></a>
+    
+    
+
+                            </div>
+                            <div id="TradingIteration.portfolio_value" class="classattr">
+                                <div class="attr variable">
+            <span class="name">portfolio_value</span><span class="annotation">: float</span>
+
+        
+    </div>
+    <a class="headerlink" href="#TradingIteration.portfolio_value"></a>
+    
+    
+
+                            </div>
+                            <div id="TradingIteration.accumulated_roi" class="classattr">
+                                <div class="attr variable">
+            <span class="name">accumulated_roi</span><span class="annotation">: Optional[float]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#TradingIteration.accumulated_roi"></a>
+    
+    
+
+                            </div>
+                </section>
                 <section id="Trader">
                             <input id="Trader-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -163,59 +314,65 @@
 
     </div>
     <a class="headerlink" href="#Trader"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader-11"><a href="#Trader-11"><span class="linenos">11</span></a><span class="k">class</span> <span class="nc">Trader</span><span class="p">:</span>
-</span><span id="Trader-12"><a href="#Trader-12"><span class="linenos">12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class&quot;&quot;&quot;</span>
-</span><span id="Trader-13"><a href="#Trader-13"><span class="linenos">13</span></a>
-</span><span id="Trader-14"><a href="#Trader-14"><span class="linenos">14</span></a>    <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span>
-</span><span id="Trader-15"><a href="#Trader-15"><span class="linenos">15</span></a>    <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span>
-</span><span id="Trader-16"><a href="#Trader-16"><span class="linenos">16</span></a>    <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span>
-</span><span id="Trader-17"><a href="#Trader-17"><span class="linenos">17</span></a>    <span class="n">last_result</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">StreamIteration</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Trader-18"><a href="#Trader-18"><span class="linenos">18</span></a>    <span class="n">last_valuation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-</span><span id="Trader-19"><a href="#Trader-19"><span class="linenos">19</span></a>
-</span><span id="Trader-20"><a href="#Trader-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Trader-21"><a href="#Trader-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="Trader-22"><a href="#Trader-22"><span class="linenos">22</span></a>        <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span><span class="p">,</span>
-</span><span id="Trader-23"><a href="#Trader-23"><span class="linenos">23</span></a>        <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span><span class="p">,</span>
-</span><span id="Trader-24"><a href="#Trader-24"><span class="linenos">24</span></a>        <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span><span class="p">,</span>
-</span><span id="Trader-25"><a href="#Trader-25"><span class="linenos">25</span></a>    <span class="p">):</span>
-</span><span id="Trader-26"><a href="#Trader-26"><span class="linenos">26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Init method&quot;&quot;&quot;</span>
-</span><span id="Trader-27"><a href="#Trader-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span> <span class="o">=</span> <span class="n">datastream</span>
-</span><span id="Trader-28"><a href="#Trader-28"><span class="linenos">28</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">portfolio</span>
-</span><span id="Trader-29"><a href="#Trader-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
-</span><span id="Trader-30"><a href="#Trader-30"><span class="linenos">30</span></a>
-</span><span id="Trader-31"><a href="#Trader-31"><span class="linenos">31</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Trader-32"><a href="#Trader-32"><span class="linenos">32</span></a>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-</span><span id="Trader-33"><a href="#Trader-33"><span class="linenos">33</span></a>        <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Trader-34"><a href="#Trader-34"><span class="linenos">34</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="Trader-35"><a href="#Trader-35"><span class="linenos">35</span></a>        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">**</span><span class="n">obs</span><span class="p">)</span>
-</span><span id="Trader-36"><a href="#Trader-36"><span class="linenos">36</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">])</span>
-</span><span id="Trader-37"><a href="#Trader-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span> <span class="o">=</span> <span class="n">StreamIteration</span><span class="p">(</span>
-</span><span id="Trader-38"><a href="#Trader-38"><span class="linenos">38</span></a>            <span class="n">time</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
-</span><span id="Trader-39"><a href="#Trader-39"><span class="linenos">39</span></a>            <span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
-</span><span id="Trader-40"><a href="#Trader-40"><span class="linenos">40</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span>
-</span><span id="Trader-41"><a href="#Trader-41"><span class="linenos">41</span></a>            <span class="n">roi</span><span class="o">=</span><span class="n">roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()),</span>
-</span><span id="Trader-42"><a href="#Trader-42"><span class="linenos">42</span></a>            <span class="n">portfolio_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">(),</span>
-</span><span id="Trader-43"><a href="#Trader-43"><span class="linenos">43</span></a>            <span class="n">accumulated_roi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">accumulated_return</span><span class="p">(),</span>
-</span><span id="Trader-44"><a href="#Trader-44"><span class="linenos">44</span></a>        <span class="p">)</span>
-</span><span id="Trader-45"><a href="#Trader-45"><span class="linenos">45</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()</span>
-</span><span id="Trader-46"><a href="#Trader-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="Trader-47"><a href="#Trader-47"><span class="linenos">47</span></a>
-</span><span id="Trader-48"><a href="#Trader-48"><span class="linenos">48</span></a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamIteration</span><span class="p">:</span>
-</span><span id="Trader-49"><a href="#Trader-49"><span class="linenos">49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Trader last result&quot;&quot;&quot;</span>
-</span><span id="Trader-50"><a href="#Trader-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span>
-</span><span id="Trader-51"><a href="#Trader-51"><span class="linenos">51</span></a>
-</span><span id="Trader-52"><a href="#Trader-52"><span class="linenos">52</span></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Trader-53"><a href="#Trader-53"><span class="linenos">53</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
-</span><span id="Trader-54"><a href="#Trader-54"><span class="linenos">54</span></a>            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
-</span><span id="Trader-55"><a href="#Trader-55"><span class="linenos">55</span></a>            <span class="c1"># Printing status after BUY or SELL</span>
-</span><span id="Trader-56"><a href="#Trader-56"><span class="linenos">56</span></a>            <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">position</span> <span class="o">!=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span><span class="p">:</span>
-</span><span id="Trader-57"><a href="#Trader-57"><span class="linenos">57</span></a>                <span class="nb">print</span><span class="p">(</span>
-</span><span id="Trader-58"><a href="#Trader-58"><span class="linenos">58</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">  &quot;</span>
-</span><span id="Trader-59"><a href="#Trader-59"><span class="linenos">59</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">name</span><span class="si">:</span><span class="s2">5</span><span class="si">}</span><span class="s2">  &quot;</span>
-</span><span id="Trader-60"><a href="#Trader-60"><span class="linenos">60</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> USD  &quot;</span>
-</span><span id="Trader-61"><a href="#Trader-61"><span class="linenos">61</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;ROI </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2"> %  &quot;</span>
-</span><span id="Trader-62"><a href="#Trader-62"><span class="linenos">62</span></a>                    <span class="sa">f</span><span class="s2">&quot;Accum. ROI </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">accumulated_roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
-</span><span id="Trader-63"><a href="#Trader-63"><span class="linenos">63</span></a>                <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader-24"><a href="#Trader-24"><span class="linenos">24</span></a><span class="k">class</span> <span class="nc">Trader</span><span class="p">:</span>
+</span><span id="Trader-25"><a href="#Trader-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class&quot;&quot;&quot;</span>
+</span><span id="Trader-26"><a href="#Trader-26"><span class="linenos">26</span></a>
+</span><span id="Trader-27"><a href="#Trader-27"><span class="linenos">27</span></a>    <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span>
+</span><span id="Trader-28"><a href="#Trader-28"><span class="linenos">28</span></a>    <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span>
+</span><span id="Trader-29"><a href="#Trader-29"><span class="linenos">29</span></a>    <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span>
+</span><span id="Trader-30"><a href="#Trader-30"><span class="linenos">30</span></a>    <span class="n">last_result</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TradingIteration</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Trader-31"><a href="#Trader-31"><span class="linenos">31</span></a>    <span class="n">last_valuation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+</span><span id="Trader-32"><a href="#Trader-32"><span class="linenos">32</span></a>
+</span><span id="Trader-33"><a href="#Trader-33"><span class="linenos">33</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Trader-34"><a href="#Trader-34"><span class="linenos">34</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Trader-35"><a href="#Trader-35"><span class="linenos">35</span></a>        <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span><span class="p">,</span>
+</span><span id="Trader-36"><a href="#Trader-36"><span class="linenos">36</span></a>        <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span><span class="p">,</span>
+</span><span id="Trader-37"><a href="#Trader-37"><span class="linenos">37</span></a>        <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span><span class="p">,</span>
+</span><span id="Trader-38"><a href="#Trader-38"><span class="linenos">38</span></a>    <span class="p">):</span>
+</span><span id="Trader-39"><a href="#Trader-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Init method&quot;&quot;&quot;</span>
+</span><span id="Trader-40"><a href="#Trader-40"><span class="linenos">40</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span> <span class="o">=</span> <span class="n">datastream</span>
+</span><span id="Trader-41"><a href="#Trader-41"><span class="linenos">41</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">portfolio</span>
+</span><span id="Trader-42"><a href="#Trader-42"><span class="linenos">42</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+</span><span id="Trader-43"><a href="#Trader-43"><span class="linenos">43</span></a>
+</span><span id="Trader-44"><a href="#Trader-44"><span class="linenos">44</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Trader-45"><a href="#Trader-45"><span class="linenos">45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perfoms a trading iteration&quot;&quot;&quot;</span>
+</span><span id="Trader-46"><a href="#Trader-46"><span class="linenos">46</span></a>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+</span><span id="Trader-47"><a href="#Trader-47"><span class="linenos">47</span></a>        <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Trader-48"><a href="#Trader-48"><span class="linenos">48</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="Trader-49"><a href="#Trader-49"><span class="linenos">49</span></a>        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">**</span><span class="n">obs</span><span class="p">)</span>
+</span><span id="Trader-50"><a href="#Trader-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="o">**</span><span class="n">asdict</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+</span><span id="Trader-51"><a href="#Trader-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span> <span class="o">=</span> <span class="n">TradingIteration</span><span class="p">(</span>
+</span><span id="Trader-52"><a href="#Trader-52"><span class="linenos">52</span></a>            <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span>
+</span><span id="Trader-53"><a href="#Trader-53"><span class="linenos">53</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span>
+</span><span id="Trader-54"><a href="#Trader-54"><span class="linenos">54</span></a>            <span class="n">roi</span><span class="o">=</span><span class="n">roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()),</span>
+</span><span id="Trader-55"><a href="#Trader-55"><span class="linenos">55</span></a>            <span class="n">portfolio_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">(),</span>
+</span><span id="Trader-56"><a href="#Trader-56"><span class="linenos">56</span></a>            <span class="n">accumulated_roi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">accumulated_return</span><span class="p">(),</span>
+</span><span id="Trader-57"><a href="#Trader-57"><span class="linenos">57</span></a>        <span class="p">)</span>
+</span><span id="Trader-58"><a href="#Trader-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()</span>
+</span><span id="Trader-59"><a href="#Trader-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="kc">True</span>
+</span><span id="Trader-60"><a href="#Trader-60"><span class="linenos">60</span></a>
+</span><span id="Trader-61"><a href="#Trader-61"><span class="linenos">61</span></a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TradingIteration</span><span class="p">:</span>
+</span><span id="Trader-62"><a href="#Trader-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Trader last result&quot;&quot;&quot;</span>
+</span><span id="Trader-63"><a href="#Trader-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span>
+</span><span id="Trader-64"><a href="#Trader-64"><span class="linenos">64</span></a>
+</span><span id="Trader-65"><a href="#Trader-65"><span class="linenos">65</span></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Trader-66"><a href="#Trader-66"><span class="linenos">66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A default runner&quot;&quot;&quot;</span>
+</span><span id="Trader-67"><a href="#Trader-67"><span class="linenos">67</span></a>        <span class="c1"># A nice header</span>
+</span><span id="Trader-68"><a href="#Trader-68"><span class="linenos">68</span></a>        <span class="nb">print</span><span class="p">(</span>
+</span><span id="Trader-69"><a href="#Trader-69"><span class="linenos">69</span></a>            <span class="s2">&quot;</span><span class="si">{:26}</span><span class="s2"> </span><span class="si">{:4}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2">  </span><span class="si">{:&gt;10}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>  <span class="c1"># pylint: disable=consider-using-f-string</span>
+</span><span id="Trader-70"><a href="#Trader-70"><span class="linenos">70</span></a>                <span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="s2">&quot;Pos.&quot;</span><span class="p">,</span> <span class="s2">&quot;Price&quot;</span><span class="p">,</span> <span class="s2">&quot;ROI&quot;</span><span class="p">,</span> <span class="s2">&quot;Valuation&quot;</span><span class="p">,</span> <span class="s2">&quot;Accum.ROI&quot;</span>
+</span><span id="Trader-71"><a href="#Trader-71"><span class="linenos">71</span></a>            <span class="p">)</span>
+</span><span id="Trader-72"><a href="#Trader-72"><span class="linenos">72</span></a>        <span class="p">)</span>
+</span><span id="Trader-73"><a href="#Trader-73"><span class="linenos">73</span></a>        <span class="c1"># Run the back-testing</span>
+</span><span id="Trader-74"><a href="#Trader-74"><span class="linenos">74</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+</span><span id="Trader-75"><a href="#Trader-75"><span class="linenos">75</span></a>            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
+</span><span id="Trader-76"><a href="#Trader-76"><span class="linenos">76</span></a>            <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">position</span> <span class="o">!=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span><span class="p">:</span>
+</span><span id="Trader-77"><a href="#Trader-77"><span class="linenos">77</span></a>                <span class="c1"># A nice output</span>
+</span><span id="Trader-78"><a href="#Trader-78"><span class="linenos">78</span></a>                <span class="nb">print</span><span class="p">(</span>
+</span><span id="Trader-79"><a href="#Trader-79"><span class="linenos">79</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">name</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span id="Trader-80"><a href="#Trader-80"><span class="linenos">80</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2">% </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">portfolio_value</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span id="Trader-81"><a href="#Trader-81"><span class="linenos">81</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">accumulated_roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2">%&quot;</span>
+</span><span id="Trader-82"><a href="#Trader-82"><span class="linenos">82</span></a>                <span class="p">)</span>
 </span></pre></div>
 
 
@@ -233,16 +390,16 @@
 
     </div>
     <a class="headerlink" href="#Trader.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.__init__-20"><a href="#Trader.__init__-20"><span class="linenos">20</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Trader.__init__-21"><a href="#Trader.__init__-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="Trader.__init__-22"><a href="#Trader.__init__-22"><span class="linenos">22</span></a>        <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span><span class="p">,</span>
-</span><span id="Trader.__init__-23"><a href="#Trader.__init__-23"><span class="linenos">23</span></a>        <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span><span class="p">,</span>
-</span><span id="Trader.__init__-24"><a href="#Trader.__init__-24"><span class="linenos">24</span></a>        <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span><span class="p">,</span>
-</span><span id="Trader.__init__-25"><a href="#Trader.__init__-25"><span class="linenos">25</span></a>    <span class="p">):</span>
-</span><span id="Trader.__init__-26"><a href="#Trader.__init__-26"><span class="linenos">26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Init method&quot;&quot;&quot;</span>
-</span><span id="Trader.__init__-27"><a href="#Trader.__init__-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span> <span class="o">=</span> <span class="n">datastream</span>
-</span><span id="Trader.__init__-28"><a href="#Trader.__init__-28"><span class="linenos">28</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">portfolio</span>
-</span><span id="Trader.__init__-29"><a href="#Trader.__init__-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.__init__-33"><a href="#Trader.__init__-33"><span class="linenos">33</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Trader.__init__-34"><a href="#Trader.__init__-34"><span class="linenos">34</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Trader.__init__-35"><a href="#Trader.__init__-35"><span class="linenos">35</span></a>        <span class="n">strategy</span><span class="p">:</span> <span class="n">Strategy</span><span class="p">,</span>
+</span><span id="Trader.__init__-36"><a href="#Trader.__init__-36"><span class="linenos">36</span></a>        <span class="n">portfolio</span><span class="p">:</span> <span class="n">Portfolio</span><span class="p">,</span>
+</span><span id="Trader.__init__-37"><a href="#Trader.__init__-37"><span class="linenos">37</span></a>        <span class="n">datastream</span><span class="p">:</span> <span class="n">DataStreamer</span><span class="p">,</span>
+</span><span id="Trader.__init__-38"><a href="#Trader.__init__-38"><span class="linenos">38</span></a>    <span class="p">):</span>
+</span><span id="Trader.__init__-39"><a href="#Trader.__init__-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Init method&quot;&quot;&quot;</span>
+</span><span id="Trader.__init__-40"><a href="#Trader.__init__-40"><span class="linenos">40</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span> <span class="o">=</span> <span class="n">datastream</span>
+</span><span id="Trader.__init__-41"><a href="#Trader.__init__-41"><span class="linenos">41</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">portfolio</span>
+</span><span id="Trader.__init__-42"><a href="#Trader.__init__-42"><span class="linenos">42</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">strategy</span>
 </span></pre></div>
 
 
@@ -286,7 +443,7 @@
                             </div>
                             <div id="Trader.last_result" class="classattr">
                                 <div class="attr variable">
-            <span class="name">last_result</span><span class="annotation">: Optional[<a href="datastreamers.html#StreamIteration">pybottrader.datastreamers.StreamIteration</a>]</span>        =
+            <span class="name">last_result</span><span class="annotation">: Optional[<a href="#TradingIteration">TradingIteration</a>]</span>        =
 <span class="default_value">None</span>
 
         
@@ -319,26 +476,28 @@
 
     </div>
     <a class="headerlink" href="#Trader.next"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.next-31"><a href="#Trader.next-31"><span class="linenos">31</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Trader.next-32"><a href="#Trader.next-32"><span class="linenos">32</span></a>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-</span><span id="Trader.next-33"><a href="#Trader.next-33"><span class="linenos">33</span></a>        <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Trader.next-34"><a href="#Trader.next-34"><span class="linenos">34</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="Trader.next-35"><a href="#Trader.next-35"><span class="linenos">35</span></a>        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">**</span><span class="n">obs</span><span class="p">)</span>
-</span><span id="Trader.next-36"><a href="#Trader.next-36"><span class="linenos">36</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;close&quot;</span><span class="p">])</span>
-</span><span id="Trader.next-37"><a href="#Trader.next-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span> <span class="o">=</span> <span class="n">StreamIteration</span><span class="p">(</span>
-</span><span id="Trader.next-38"><a href="#Trader.next-38"><span class="linenos">38</span></a>            <span class="n">time</span><span class="o">=</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
-</span><span id="Trader.next-39"><a href="#Trader.next-39"><span class="linenos">39</span></a>            <span class="n">position</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
-</span><span id="Trader.next-40"><a href="#Trader.next-40"><span class="linenos">40</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span>
-</span><span id="Trader.next-41"><a href="#Trader.next-41"><span class="linenos">41</span></a>            <span class="n">roi</span><span class="o">=</span><span class="n">roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()),</span>
-</span><span id="Trader.next-42"><a href="#Trader.next-42"><span class="linenos">42</span></a>            <span class="n">portfolio_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">(),</span>
-</span><span id="Trader.next-43"><a href="#Trader.next-43"><span class="linenos">43</span></a>            <span class="n">accumulated_roi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">accumulated_return</span><span class="p">(),</span>
-</span><span id="Trader.next-44"><a href="#Trader.next-44"><span class="linenos">44</span></a>        <span class="p">)</span>
-</span><span id="Trader.next-45"><a href="#Trader.next-45"><span class="linenos">45</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()</span>
-</span><span id="Trader.next-46"><a href="#Trader.next-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.next-44"><a href="#Trader.next-44"><span class="linenos">44</span></a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Trader.next-45"><a href="#Trader.next-45"><span class="linenos">45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Perfoms a trading iteration&quot;&quot;&quot;</span>
+</span><span id="Trader.next-46"><a href="#Trader.next-46"><span class="linenos">46</span></a>        <span class="n">obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datastream</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+</span><span id="Trader.next-47"><a href="#Trader.next-47"><span class="linenos">47</span></a>        <span class="k">if</span> <span class="n">obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Trader.next-48"><a href="#Trader.next-48"><span class="linenos">48</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="Trader.next-49"><a href="#Trader.next-49"><span class="linenos">49</span></a>        <span class="n">signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="o">**</span><span class="n">obs</span><span class="p">)</span>
+</span><span id="Trader.next-50"><a href="#Trader.next-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="o">**</span><span class="n">asdict</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+</span><span id="Trader.next-51"><a href="#Trader.next-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span> <span class="o">=</span> <span class="n">TradingIteration</span><span class="p">(</span>
+</span><span id="Trader.next-52"><a href="#Trader.next-52"><span class="linenos">52</span></a>            <span class="n">signal</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span>
+</span><span id="Trader.next-53"><a href="#Trader.next-53"><span class="linenos">53</span></a>            <span class="n">data</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span>
+</span><span id="Trader.next-54"><a href="#Trader.next-54"><span class="linenos">54</span></a>            <span class="n">roi</span><span class="o">=</span><span class="n">roi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()),</span>
+</span><span id="Trader.next-55"><a href="#Trader.next-55"><span class="linenos">55</span></a>            <span class="n">portfolio_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">(),</span>
+</span><span id="Trader.next-56"><a href="#Trader.next-56"><span class="linenos">56</span></a>            <span class="n">accumulated_roi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">accumulated_return</span><span class="p">(),</span>
+</span><span id="Trader.next-57"><a href="#Trader.next-57"><span class="linenos">57</span></a>        <span class="p">)</span>
+</span><span id="Trader.next-58"><a href="#Trader.next-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_valuation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">portfolio</span><span class="o">.</span><span class="n">valuation</span><span class="p">()</span>
+</span><span id="Trader.next-59"><a href="#Trader.next-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Perfoms a trading iteration</p>
+</div>
+
 
                             </div>
                             <div id="Trader.status" class="classattr">
@@ -346,15 +505,15 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">status</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="datastreamers.html#StreamIteration">pybottrader.datastreamers.StreamIteration</a></span>:</span></span>
+        <span class="name">status</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#TradingIteration">TradingIteration</a></span>:</span></span>
 
                 <label class="view-source-button" for="Trader.status-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Trader.status"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.status-48"><a href="#Trader.status-48"><span class="linenos">48</span></a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamIteration</span><span class="p">:</span>
-</span><span id="Trader.status-49"><a href="#Trader.status-49"><span class="linenos">49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Trader last result&quot;&quot;&quot;</span>
-</span><span id="Trader.status-50"><a href="#Trader.status-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.status-61"><a href="#Trader.status-61"><span class="linenos">61</span></a>    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TradingIteration</span><span class="p">:</span>
+</span><span id="Trader.status-62"><a href="#Trader.status-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Trader last result&quot;&quot;&quot;</span>
+</span><span id="Trader.status-63"><a href="#Trader.status-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_result</span>
 </span></pre></div>
 
 
@@ -374,22 +533,30 @@
 
     </div>
     <a class="headerlink" href="#Trader.run"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.run-52"><a href="#Trader.run-52"><span class="linenos">52</span></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Trader.run-53"><a href="#Trader.run-53"><span class="linenos">53</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
-</span><span id="Trader.run-54"><a href="#Trader.run-54"><span class="linenos">54</span></a>            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
-</span><span id="Trader.run-55"><a href="#Trader.run-55"><span class="linenos">55</span></a>            <span class="c1"># Printing status after BUY or SELL</span>
-</span><span id="Trader.run-56"><a href="#Trader.run-56"><span class="linenos">56</span></a>            <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">position</span> <span class="o">!=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span><span class="p">:</span>
-</span><span id="Trader.run-57"><a href="#Trader.run-57"><span class="linenos">57</span></a>                <span class="nb">print</span><span class="p">(</span>
-</span><span id="Trader.run-58"><a href="#Trader.run-58"><span class="linenos">58</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">  &quot;</span>
-</span><span id="Trader.run-59"><a href="#Trader.run-59"><span class="linenos">59</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">name</span><span class="si">:</span><span class="s2">5</span><span class="si">}</span><span class="s2">  &quot;</span>
-</span><span id="Trader.run-60"><a href="#Trader.run-60"><span class="linenos">60</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> USD  &quot;</span>
-</span><span id="Trader.run-61"><a href="#Trader.run-61"><span class="linenos">61</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;ROI </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2"> %  &quot;</span>
-</span><span id="Trader.run-62"><a href="#Trader.run-62"><span class="linenos">62</span></a>                    <span class="sa">f</span><span class="s2">&quot;Accum. ROI </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">accumulated_roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
-</span><span id="Trader.run-63"><a href="#Trader.run-63"><span class="linenos">63</span></a>                <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Trader.run-65"><a href="#Trader.run-65"><span class="linenos">65</span></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Trader.run-66"><a href="#Trader.run-66"><span class="linenos">66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;A default runner&quot;&quot;&quot;</span>
+</span><span id="Trader.run-67"><a href="#Trader.run-67"><span class="linenos">67</span></a>        <span class="c1"># A nice header</span>
+</span><span id="Trader.run-68"><a href="#Trader.run-68"><span class="linenos">68</span></a>        <span class="nb">print</span><span class="p">(</span>
+</span><span id="Trader.run-69"><a href="#Trader.run-69"><span class="linenos">69</span></a>            <span class="s2">&quot;</span><span class="si">{:26}</span><span class="s2"> </span><span class="si">{:4}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2">  </span><span class="si">{:&gt;10}</span><span class="s2"> </span><span class="si">{:&gt;10}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>  <span class="c1"># pylint: disable=consider-using-f-string</span>
+</span><span id="Trader.run-70"><a href="#Trader.run-70"><span class="linenos">70</span></a>                <span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="s2">&quot;Pos.&quot;</span><span class="p">,</span> <span class="s2">&quot;Price&quot;</span><span class="p">,</span> <span class="s2">&quot;ROI&quot;</span><span class="p">,</span> <span class="s2">&quot;Valuation&quot;</span><span class="p">,</span> <span class="s2">&quot;Accum.ROI&quot;</span>
+</span><span id="Trader.run-71"><a href="#Trader.run-71"><span class="linenos">71</span></a>            <span class="p">)</span>
+</span><span id="Trader.run-72"><a href="#Trader.run-72"><span class="linenos">72</span></a>        <span class="p">)</span>
+</span><span id="Trader.run-73"><a href="#Trader.run-73"><span class="linenos">73</span></a>        <span class="c1"># Run the back-testing</span>
+</span><span id="Trader.run-74"><a href="#Trader.run-74"><span class="linenos">74</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+</span><span id="Trader.run-75"><a href="#Trader.run-75"><span class="linenos">75</span></a>            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">()</span>
+</span><span id="Trader.run-76"><a href="#Trader.run-76"><span class="linenos">76</span></a>            <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">position</span> <span class="o">!=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span><span class="p">:</span>
+</span><span id="Trader.run-77"><a href="#Trader.run-77"><span class="linenos">77</span></a>                <span class="c1"># A nice output</span>
+</span><span id="Trader.run-78"><a href="#Trader.run-78"><span class="linenos">78</span></a>                <span class="nb">print</span><span class="p">(</span>
+</span><span id="Trader.run-79"><a href="#Trader.run-79"><span class="linenos">79</span></a>                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">name</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span id="Trader.run-80"><a href="#Trader.run-80"><span class="linenos">80</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2">% </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">portfolio_value</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span id="Trader.run-81"><a href="#Trader.run-81"><span class="linenos">81</span></a>                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">accumulated_roi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100.0</span><span class="si">:</span><span class="s2">10.2f</span><span class="si">}</span><span class="s2">%&quot;</span>
+</span><span id="Trader.run-82"><a href="#Trader.run-82"><span class="linenos">82</span></a>                <span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>A default runner</p>
+</div>
+
 
                             </div>
                 </section>

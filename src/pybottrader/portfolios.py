@@ -5,6 +5,7 @@ This module has beed adapted from:
 https://github.com/jailop/trading/tree/main/indicators-c%2B%2B
 """
 
+from datetime import datetime
 from .strategies import Position
 from .indicators import roi
 
@@ -14,6 +15,7 @@ class Portfolio:
 
     initial_cash: float
     last_position: Position
+    last_exchange: str
     last_price: float
     last_ticker: str
 
@@ -23,14 +25,21 @@ class Portfolio:
         self.last_position = Position.STAY
         self.last_price = 0.0
         self.last_ticker = ""
+        self.last_exchange = ""
 
     def process(
-        self, ticker: str = "", position: Position = Position.STAY, price: float = 0.0
+        self,
+        time: datetime = datetime.now(),
+        exchange: str = "",
+        ticker: str = "",
+        position: Position = Position.STAY,
+        price: float = 0.0,
     ):
         """Process signal"""
         self.last_ticker = ticker
         self.last_price = price
         self.last_position = position
+        self.last_exchange = exchange
 
     def valuation(self) -> float:
         """Default valuation method"""
@@ -60,7 +69,12 @@ class DummyPortfolio(Portfolio):
         self.share_price = 0.0
 
     def process(
-        self, ticker: str = "", position: Position = Position.STAY, price: float = 0.0
+        self,
+        time: datetime = datetime.now(),
+        exchange: str = "",
+        ticker: str = "",
+        position: Position = Position.STAY,
+        price: float = 0.0,
     ):
         super().process(ticker=ticker, position=position, price=price)
         if position == Position.BUY:

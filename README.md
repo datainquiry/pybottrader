@@ -16,7 +16,7 @@ clients. It is intended, when it becomes stable, to be used by retail traders.
   their results. They use a bracket notation to bring access to results, like
   `ind[0]` for the most recent result and `ind[-1]` for the previous one.
   Current implemented indicators are `MA` (simple moving average), `EMA`
-  (exponential moving average), RSI (Relative Strength Index), MACD (Moving
+  (exponential moving average), `RSI` (Relative Strength Index), `MACD` (Moving
   average convergence/divergence), and `ROI` (return of investment). Check some
   examples in [this test
   file](https://github.com/jailop/pybottrader/blob/main/test/test_indicators.py).
@@ -45,16 +45,20 @@ from pybottrader.indicators import RSI
 from pybottrader.datastreamers import YFinanceStreamer
 from pybottrader.portfolios import DummyPortfolio
 from pybottrader.traders import Trader
-from pybottrader.strategies import Strategy, Position
+from pybottrader.strategies import Strategy, Position, StrategySignal
 
 class SimpleRSIStrategy(Strategy):
     rsi: RSI
     last_flip = Position.SELL
+    lower_band: float
+    upper_band: float
 
-    def __init__(self):
+    def __init__(self, lower_band=30.0, upper_band=70.0):
         self.rsi = RSI()
+        self.lower_band = lower_band
+        self.upper_band = upper_band
 
-    def evaluate(self, *args, **kwargs) -> Position:
+    def evaluate(self, *args, **kwargs) -> StrategySignal:
         # default positio STAY
         position = Position.STAY
         # It is expected that open and close values
@@ -65,62 +69,43 @@ class SimpleRSIStrategy(Strategy):
         # Update the RSI indicator
         self.rsi.update(open_price=kwargs["open"], close_price=kwargs["close"])
         # If RSI is less than 30, buy
-        if self.last_flip == Position.SELL and self.rsi[0] < 30:
+        if self.last_flip == Position.SELL and self.rsi[0] < self.lower_band:
             position = Position.BUY
             self.last_flip = Position.BUY
         # If RSI is greater than 70, sell
-        elif self.last_flip == Position.BUY and self.rsi[0] > 70:
+        elif self.last_flip == Position.BUY and self.rsi[0] > self.upper_band:
             position = Position.SELL
             self.last_flip = Position.SELL
-        return position
+        return StrategySignal(
+            time=kwargs["time"], price=kwargs["close"], position=position
+        )
 
 # Apple, daily data from 2021 to 2023
 datastream = YFinanceStreamer("AAPL", start="2021-01-01", end="2023-12-31")
 # Start with USD 1,000
-portfolio = DummyPortfolio(1000)
+portfolio = DummyPortfolio(1000.0)
 # My strategy
-strategy = SimpleRSIStrategy()
+strategy = SimpleRSIStrategy(lower_band=25.0, upper_band=75.0)
+
 # Putting everything together
 trader = Trader(strategy, portfolio, datastream)
-
-# A nice header
-print(
-    "{:10} {:4} {:>10} {:>10}  {:>10} {:>10}".format(
-        "Date", "Pos.", "Price", "ROI", "Valuation", "Accum.ROI"
-    )
-)
-
-# Run the back-testing
-while trader.next():
-    status = trader.status()
-    if status.position != Position.STAY:
-        date = status.time.strftime("%Y-%m-%d")
-        # A nice output
-        print(
-            f"{date} {status.position.name:4} {status.data['close']:10.2f} "
-            + f"{status.roi * 100.0:10.2f}% {status.portfolio_value:10.2f} "
-            + f"{status.accumulated_roi * 100.0:10.2f}%"
-        )
+trader.run()
 ```
 
-Output is shown below. Using this strategy ended in a loss.
+Output is shown below.
 
 ```
-Date       Pos.      Price        ROI   Valuation  Accum.ROI
-2021-02-10 BUY      132.59       0.00%    1000.00       0.00%
-2021-04-09 SELL     130.25      -1.77%     982.35      -1.77%
-2021-05-05 BUY      125.45       0.00%     982.35      -1.77%
-2021-06-21 SELL     129.78       3.45%    1016.28       1.63%
-2021-09-20 BUY      140.43      -0.00%    1016.28       1.63%
-2021-10-20 SELL     146.64       4.42%    1061.21       6.12%
-2022-01-24 BUY      159.02       0.00%    1061.21       6.12%
-2022-03-25 SELL     172.12       8.24%    1148.69      14.87%
-2022-04-25 BUY      160.46       0.00%    1148.69      14.87%
-2022-06-08 SELL     145.98      -9.03%    1045.00       4.50%
-2022-09-02 BUY      153.93       0.00%    1045.00       4.50%
-2023-01-24 SELL     141.05      -8.37%     957.52      -4.25%
-2023-08-04 BUY      180.62       0.00%     957.52      -4.25%
-2023-10-10 SELL     177.29      -1.85%     939.85      -6.02%
+Time                       Pos.      Price        ROI   Valuation  Accum.ROI
+2021-02-11 00:00:00-05:00 BUY      132.33       0.00%    1000.00       0.00%
+2021-06-21 00:00:00-04:00 SELL     129.78      -1.93%     980.72      -1.93%
+2021-09-20 00:00:00-04:00 BUY      140.43       0.00%     980.72      -1.93%
+2021-10-22 00:00:00-04:00 SELL     146.08       4.02%    1020.17       2.02%
+2022-05-24 00:00:00-04:00 BUY      138.48       0.00%    1020.17       2.02%
+2022-07-08 00:00:00-04:00 SELL     145.07       4.76%    1068.72       6.87%
+2022-09-02 00:00:00-04:00 BUY      153.93       0.00%    1068.72       6.87%
+2023-01-24 00:00:00-05:00 SELL     141.05      -8.37%     979.26      -2.07%
+2023-08-07 00:00:00-04:00 BUY      177.50       0.00%     979.26      -2.07%
+2023-10-12 00:00:00-04:00 SELL     179.59       1.18%     990.78      -0.92%
 ```
 
 ## Installation

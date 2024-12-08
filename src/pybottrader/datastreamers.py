@@ -1,22 +1,8 @@
 """Data Streamers"""
 
 from typing import Union
-from attrs import define
 import pandas as pd
 import yfinance
-from .strategies import Position
-
-
-@define
-class StreamIteration:
-    """Used to report results from a stream iteration"""
-
-    time: pd.Timestamp
-    position: Position
-    data: dict
-    roi: Union[float, None]
-    portfolio_value: float
-    accumulated_roi: Union[float, None]
 
 
 class DataStreamer:
@@ -56,6 +42,7 @@ class YFinanceStreamer(DataStreamer):
         if self.index >= len(self.data):
             return None
         result = self.data.iloc[self.index].to_dict()
+        result["time"] = result["time"].to_pydatetime()
         self.index += 1
         return result
 
