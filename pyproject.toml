@@ -4,9 +4,6 @@ version = "0.0.5"
 dynamic = ["version"]
 readme = "README.md"
 description = "An experimental Python library to implement trading bots"
-mantainers = [
-    {name = "Jaime Lopez", email = "jailop AT protonmail DOT com"},
-]
 license = {file = "LICENSE"}
 keywords = ["trading", "bots", "finance"]
 dependencies = [
