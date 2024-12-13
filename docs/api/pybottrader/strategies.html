@@ -122,44 +122,45 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">define</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">define</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Trading Positions&quot;&quot;&quot;</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">STAY</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">BUY</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">SELL</span> <span class="o">=</span> <span class="mi">3</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Trading Positions&quot;&quot;&quot;</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">STAY</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">BUY</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">SELL</span> <span class="o">=</span> <span class="mi">3</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nd">@define</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="k">class</span> <span class="nc">StrategySignal</span><span class="p">:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;To report computations of an strategy&quot;&quot;&quot;</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">position</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="nd">@define</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">class</span> <span class="nc">StrategySignal</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;To report computations of an strategy&quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">position</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="k">class</span> <span class="nc">Strategy</span><span class="p">:</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for strategies&quot;&quot;&quot;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        Init Method. Included for future support.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrategySignal</span><span class="p">:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        Evaluate method. Include for future support</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="c1"># The default position is STAY</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">StrategySignal</span><span class="p">()</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="k">class</span> <span class="nc">Strategy</span><span class="p">:</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for strategies&quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        Init Method. Included for future support.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StrategySignal</span><span class="p">:</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        Evaluate method. Include for future support</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="c1"># The default position is STAY</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">StrategySignal</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -175,12 +176,12 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
 
     </div>
     <a class="headerlink" href="#Position"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Position-16"><a href="#Position-16"><span class="linenos">16</span></a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="Position-17"><a href="#Position-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Trading Positions&quot;&quot;&quot;</span>
-</span><span id="Position-18"><a href="#Position-18"><span class="linenos">18</span></a>
-</span><span id="Position-19"><a href="#Position-19"><span class="linenos">19</span></a>    <span class="n">STAY</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="Position-20"><a href="#Position-20"><span class="linenos">20</span></a>    <span class="n">BUY</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="Position-21"><a href="#Position-21"><span class="linenos">21</span></a>    <span class="n">SELL</span> <span class="o">=</span> <span class="mi">3</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Position-17"><a href="#Position-17"><span class="linenos">17</span></a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="Position-18"><a href="#Position-18"><span class="linenos">18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Trading Positions&quot;&quot;&quot;</span>
+</span><span id="Position-19"><a href="#Position-19"><span class="linenos">19</span></a>
+</span><span id="Position-20"><a href="#Position-20"><span class="linenos">20</span></a>    <span class="n">STAY</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="Position-21"><a href="#Position-21"><span class="linenos">21</span></a>    <span class="n">BUY</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="Position-22"><a href="#Position-22"><span class="linenos">22</span></a>    <span class="n">SELL</span> <span class="o">=</span> <span class="mi">3</span>
 </span></pre></div>
 
 
@@ -237,15 +238,15 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
 
     </div>
     <a class="headerlink" href="#StrategySignal"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StrategySignal-24"><a href="#StrategySignal-24"><span class="linenos">24</span></a><span class="nd">@define</span>
-</span><span id="StrategySignal-25"><a href="#StrategySignal-25"><span class="linenos">25</span></a><span class="k">class</span> <span class="nc">StrategySignal</span><span class="p">:</span>
-</span><span id="StrategySignal-26"><a href="#StrategySignal-26"><span class="linenos">26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;To report computations of an strategy&quot;&quot;&quot;</span>
-</span><span id="StrategySignal-27"><a href="#StrategySignal-27"><span class="linenos">27</span></a>
-</span><span id="StrategySignal-28"><a href="#StrategySignal-28"><span class="linenos">28</span></a>    <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-</span><span id="StrategySignal-29"><a href="#StrategySignal-29"><span class="linenos">29</span></a>    <span class="n">position</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span>
-</span><span id="StrategySignal-30"><a href="#StrategySignal-30"><span class="linenos">30</span></a>    <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-</span><span id="StrategySignal-31"><a href="#StrategySignal-31"><span class="linenos">31</span></a>    <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span id="StrategySignal-32"><a href="#StrategySignal-32"><span class="linenos">32</span></a>    <span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StrategySignal-25"><a href="#StrategySignal-25"><span class="linenos">25</span></a><span class="nd">@define</span>
+</span><span id="StrategySignal-26"><a href="#StrategySignal-26"><span class="linenos">26</span></a><span class="k">class</span> <span class="nc">StrategySignal</span><span class="p">:</span>
+</span><span id="StrategySignal-27"><a href="#StrategySignal-27"><span class="linenos">27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;To report computations of an strategy&quot;&quot;&quot;</span>
+</span><span id="StrategySignal-28"><a href="#StrategySignal-28"><span class="linenos">28</span></a>
+</span><span id="StrategySignal-29"><a href="#StrategySignal-29"><span class="linenos">29</span></a>    <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</span><span id="StrategySignal-30"><a href="#StrategySignal-30"><span class="linenos">30</span></a>    <span class="n">position</span><span class="p">:</span> <span class="n">Position</span> <span class="o">=</span> <span class="n">Position</span><span class="o">.</span><span class="n">STAY</span>
+</span><span id="StrategySignal-31"><a href="#StrategySignal-31"><span class="linenos">31</span></a>    <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+</span><span id="StrategySignal-32"><a href="#StrategySignal-32"><span class="linenos">32</span></a>    <span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span id="StrategySignal-33"><a href="#StrategySignal-33"><span class="linenos">33</span></a>    <span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -257,7 +258,7 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
                                         <input id="StrategySignal.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">StrategySignal</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">466312</span><span class="p">)</span>,</span><span class="param">	<span class="n">position</span><span class="p">:</span> <span class="n"><a href="#Position">Position</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#Position.STAY">Position.STAY</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>,</span><span class="param">	<span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></span>)</span>
+        <span class="name">StrategySignal</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">313374</span><span class="p">)</span>,</span><span class="param">	<span class="n">position</span><span class="p">:</span> <span class="n"><a href="#Position">Position</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#Position.STAY">Position.STAY</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>,</span><span class="param">	<span class="n">ticker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>,</span><span class="param">	<span class="n">exchange</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></span>)</span>
 
                 <label class="view-source-button" for="StrategySignal.__init__-view-source"><span>View Source</span></label>
 
@@ -344,20 +345,20 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
 
     </div>
     <a class="headerlink" href="#Strategy"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Strategy-35"><a href="#Strategy-35"><span class="linenos">35</span></a><span class="k">class</span> <span class="nc">Strategy</span><span class="p">:</span>
-</span><span id="Strategy-36"><a href="#Strategy-36"><span class="linenos">36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for strategies&quot;&quot;&quot;</span>
-</span><span id="Strategy-37"><a href="#Strategy-37"><span class="linenos">37</span></a>
-</span><span id="Strategy-38"><a href="#Strategy-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="Strategy-39"><a href="#Strategy-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Strategy-40"><a href="#Strategy-40"><span class="linenos">40</span></a><span class="sd">        Init Method. Included for future support.</span>
-</span><span id="Strategy-41"><a href="#Strategy-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Strategy-42"><a href="#Strategy-42"><span class="linenos">42</span></a>
-</span><span id="Strategy-43"><a href="#Strategy-43"><span class="linenos">43</span></a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrategySignal</span><span class="p">:</span>
-</span><span id="Strategy-44"><a href="#Strategy-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Strategy-45"><a href="#Strategy-45"><span class="linenos">45</span></a><span class="sd">        Evaluate method. Include for future support</span>
-</span><span id="Strategy-46"><a href="#Strategy-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Strategy-47"><a href="#Strategy-47"><span class="linenos">47</span></a>        <span class="c1"># The default position is STAY</span>
-</span><span id="Strategy-48"><a href="#Strategy-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">StrategySignal</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Strategy-36"><a href="#Strategy-36"><span class="linenos">36</span></a><span class="k">class</span> <span class="nc">Strategy</span><span class="p">:</span>
+</span><span id="Strategy-37"><a href="#Strategy-37"><span class="linenos">37</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for strategies&quot;&quot;&quot;</span>
+</span><span id="Strategy-38"><a href="#Strategy-38"><span class="linenos">38</span></a>
+</span><span id="Strategy-39"><a href="#Strategy-39"><span class="linenos">39</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Strategy-40"><a href="#Strategy-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Strategy-41"><a href="#Strategy-41"><span class="linenos">41</span></a><span class="sd">        Init Method. Included for future support.</span>
+</span><span id="Strategy-42"><a href="#Strategy-42"><span class="linenos">42</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Strategy-43"><a href="#Strategy-43"><span class="linenos">43</span></a>
+</span><span id="Strategy-44"><a href="#Strategy-44"><span class="linenos">44</span></a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StrategySignal</span><span class="p">:</span>
+</span><span id="Strategy-45"><a href="#Strategy-45"><span class="linenos">45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Strategy-46"><a href="#Strategy-46"><span class="linenos">46</span></a><span class="sd">        Evaluate method. Include for future support</span>
+</span><span id="Strategy-47"><a href="#Strategy-47"><span class="linenos">47</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Strategy-48"><a href="#Strategy-48"><span class="linenos">48</span></a>        <span class="c1"># The default position is STAY</span>
+</span><span id="Strategy-49"><a href="#Strategy-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="n">StrategySignal</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -375,10 +376,10 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
 
     </div>
     <a class="headerlink" href="#Strategy.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Strategy.__init__-38"><a href="#Strategy.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span id="Strategy.__init__-39"><a href="#Strategy.__init__-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Strategy.__init__-40"><a href="#Strategy.__init__-40"><span class="linenos">40</span></a><span class="sd">        Init Method. Included for future support.</span>
-</span><span id="Strategy.__init__-41"><a href="#Strategy.__init__-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Strategy.__init__-39"><a href="#Strategy.__init__-39"><span class="linenos">39</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="Strategy.__init__-40"><a href="#Strategy.__init__-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Strategy.__init__-41"><a href="#Strategy.__init__-41"><span class="linenos">41</span></a><span class="sd">        Init Method. Included for future support.</span>
+</span><span id="Strategy.__init__-42"><a href="#Strategy.__init__-42"><span class="linenos">42</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -392,18 +393,18 @@ stream, compute indicators, and produce BUY/SELL signals.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">evaluate</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="o">*</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span></span><span class="return-annotation">) -> <span class="n"><a href="#StrategySignal">StrategySignal</a></span>:</span></span>
+        <span class="name">evaluate</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="#StrategySignal">StrategySignal</a></span>:</span></span>
 
                 <label class="view-source-button" for="Strategy.evaluate-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Strategy.evaluate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Strategy.evaluate-43"><a href="#Strategy.evaluate-43"><span class="linenos">43</span></a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrategySignal</span><span class="p">:</span>
-</span><span id="Strategy.evaluate-44"><a href="#Strategy.evaluate-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Strategy.evaluate-45"><a href="#Strategy.evaluate-45"><span class="linenos">45</span></a><span class="sd">        Evaluate method. Include for future support</span>
-</span><span id="Strategy.evaluate-46"><a href="#Strategy.evaluate-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Strategy.evaluate-47"><a href="#Strategy.evaluate-47"><span class="linenos">47</span></a>        <span class="c1"># The default position is STAY</span>
-</span><span id="Strategy.evaluate-48"><a href="#Strategy.evaluate-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">StrategySignal</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Strategy.evaluate-44"><a href="#Strategy.evaluate-44"><span class="linenos">44</span></a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StrategySignal</span><span class="p">:</span>
+</span><span id="Strategy.evaluate-45"><a href="#Strategy.evaluate-45"><span class="linenos">45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Strategy.evaluate-46"><a href="#Strategy.evaluate-46"><span class="linenos">46</span></a><span class="sd">        Evaluate method. Include for future support</span>
+</span><span id="Strategy.evaluate-47"><a href="#Strategy.evaluate-47"><span class="linenos">47</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Strategy.evaluate-48"><a href="#Strategy.evaluate-48"><span class="linenos">48</span></a>        <span class="c1"># The default position is STAY</span>
+</span><span id="Strategy.evaluate-49"><a href="#Strategy.evaluate-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="n">StrategySignal</span><span class="p">()</span>
 </span></pre></div>
 
 
