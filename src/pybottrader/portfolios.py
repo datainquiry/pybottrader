@@ -1,12 +1,14 @@
 """
-TRADING PORTFOLIO MODELS
+# Portfolio Managers
 
-This module has beed adapted from:
-https://github.com/jailop/trading/tree/main/indicators-c%2B%2B
+Portfolio managers, to implement buy/sell policies and deliver orders.
+Currently only a `DummyPortfolio` is implemented, one that when receives a `buy`
+signal buys everything that it can with its available cash, and sells all its
+assets when receives a `sell` signal. This portfolio can be used for
+back-testing.
 """
 
-from datetime import datetime
-from .strategies import Position
+from .strategies import Position, StrategySignal
 from .indicators import roi
 
 
@@ -27,19 +29,12 @@ class Portfolio:
         self.last_ticker = ""
         self.last_exchange = ""
 
-    def process(
-        self,
-        time: datetime = datetime.now(),
-        exchange: str = "",
-        ticker: str = "",
-        position: Position = Position.STAY,
-        price: float = 0.0,
-    ):
+    def process(self, signal: StrategySignal):
         """Process signal"""
-        self.last_ticker = ticker
-        self.last_price = price
-        self.last_position = position
-        self.last_exchange = exchange
+        self.last_ticker = signal.ticker
+        self.last_price = signal.price
+        self.last_position = signal.position
+        self.last_exchange = signal.exchange
 
     def valuation(self) -> float:
         """Default valuation method"""
@@ -68,26 +63,19 @@ class DummyPortfolio(Portfolio):
         self.share_units = 0.0
         self.share_price = 0.0
 
-    def process(
-        self,
-        time: datetime = datetime.now(),
-        exchange: str = "",
-        ticker: str = "",
-        position: Position = Position.STAY,
-        price: float = 0.0,
-    ):
-        super().process(ticker=ticker, position=position, price=price)
-        if position == Position.BUY:
+    def process(self, signal: StrategySignal):
+        super().process(signal)
+        if signal.position == Position.BUY:
             if self.cash == 0.0:
                 return
-            self.share_units = self.cash / price
-            self.share_price = price
+            self.share_units = self.cash / signal.price
+            self.share_price = signal.price
             self.cash = 0.0
-        elif position == Position.SELL:
+        elif signal.position == Position.SELL:
             if self.share_units == 0.0:
                 return
-            self.cash = self.share_units * price
-            self.share_price = price
+            self.cash = self.share_units * signal.price
+            self.share_price = signal.price
             self.share_units = 0.0
 
     def valuation(self) -> float:

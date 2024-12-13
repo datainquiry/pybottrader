@@ -1,8 +1,14 @@
-"""A collection of bottraders"""
+"""
+A collection of bottraders
+
+Traders, these are bots that based on a data stream, a strategy, and a
+portfolio, run the trading operations. Currently only a basic Trader is offered,
+useful for back-testing.
+
+"""
 
 from typing import Union
-from datetime import datetime
-from attrs import define, asdict
+from attrs import define
 from .datastreamers import DataStreamer
 from .portfolios import Portfolio
 from .strategies import Strategy, Position, StrategySignal
@@ -45,8 +51,8 @@ class Trader:
         obs = self.datastream.next()
         if obs is None:
             return False
-        signal = self.strategy.evaluate(**obs)
-        self.portfolio.process(**asdict(signal))
+        signal = self.strategy.evaluate(data=obs)
+        self.portfolio.process(signal)
         self.last_result = TradingIteration(
             signal=signal,
             data=obs,
@@ -65,7 +71,7 @@ class Trader:
         """A default runner"""
         # A nice header
         print(
-            "{:26} {:4} {:>10} {:>10}  {:>10} {:>10}".format(  # pylint: disable=consider-using-f-string
+            "{:25} {:4} {:>10} {:>10}  {:>10} {:>10}".format(  # pylint: disable=consider-using-f-string
                 "Time", "Pos.", "Price", "ROI", "Valuation", "Accum.ROI"
             )
         )
@@ -75,7 +81,10 @@ class Trader:
             if status.signal.position != Position.STAY:
                 # A nice output
                 print(
-                    f"{status.signal.time} {status.signal.position.name:4} {status.data['close']:10.2f} "
-                    + f"{status.roi * 100.0:10.2f}% {status.portfolio_value:10.2f} "
+                    f"{status.signal.time} "
+                    + f"{status.signal.position.name:4} "
+                    + f"{status.data['close']:10.2f} "
+                    + f"{status.roi * 100.0:10.2f}% "
+                    + f"{status.portfolio_value:10.2f} "
                     + f"{status.accumulated_roi * 100.0:10.2f}%"
                 )
