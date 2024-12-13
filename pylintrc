@@ -1,0 +1,2 @@
+[MASTER]
+disable=abstract-method,too-few-public-methods,unused-argument

@@ -1,7 +1,16 @@
 """
-Moving Average
-Implementation adopted from:
-https://github.com/jailop/trading/tree/main/indicators-c++
+# Financial indicators for streaming data
+
+They don´t make calculations from scratch but instead by keeping memory of
+previous results (intended to be use with real time data). An `update` method is
+used to push new data and update their results. They use a bracket notation to
+bring access to results, like `ind[0]` for the most recent result and `ind[-1]`
+for the previous one.  Current implemented indicators are `MA` (simple moving
+average), `EMA` (exponential moving average), `RSI` (Relative Strength Index),
+`MACD` (Moving average convergence/divergence), and `ROI` (return of
+investment). Check some examples in [this test
+file](https://github.com/jailop/pybottrader/blob/main/test/test_indicators.py).
+
 """
 
 import numpy as np
@@ -163,6 +172,8 @@ class ROI(Indicator):
 
 
 class RSI(Indicator):
+    """Relative Strength Index"""
+
     gains: MA
     losses: MA
 
@@ -173,10 +184,11 @@ class RSI(Indicator):
         self.losses = MA(period=period)
 
     def update(self, open_price: float, close_price: float) -> float:
+        """RSI update"""
         diff = close_price - open_price
         self.gains.update(diff if diff > 0.0 else 0.0)
         self.losses.update(-diff if diff < 0.0 else 0.0)
-        if np.isnan(self.losses[0]):
+        if np.isnan(self.losses[0]) or self.losses[0] < 1e-9:
             self.push(np.nan)
         else:
             self.push(100.0 - 100.0 / (1 + self.gains[0] / self.losses[0]))
@@ -185,12 +197,15 @@ class RSI(Indicator):
 
 @define
 class MACDResult:
+    """MACD result"""
+
     macd: float
     signal: float
     hist: float
 
 
 class MACD(Indicator):
+    """Moving Average Convergence Divergence"""
 
     short: EMA
     long: EMA
@@ -214,6 +229,7 @@ class MACD(Indicator):
         self.start = long_period if long_period > short_period else short_period
 
     def update(self, value: float) -> float:
+        """MACD update"""
         self.counter += 1
         self.short.update(value)
         self.long.update(value)

@@ -22,3 +22,14 @@ v0.0.5 2024-12-08
 
 - Strategy returns a StrategySignal result. This includes fields like price,
   position, and time.
+
+v0.0.6 2024-12-13
+
+- SimpleRSIStrategy example has been updated
+- From this version onwards vendor-specific API connectors and library wrappers
+  will have their own module file. For example, the wrapper for `yfinance` now
+  it's refered as pybottrader.datastreamers.yfinance
+- `evaluate` method for the `Strategy` class now receives a named argument:
+  `data`. It is a Python dictionary provided by data streamers.
+- `process` method for the `Portfolio` class now receives as the argument a
+  `StrategySignal` object.

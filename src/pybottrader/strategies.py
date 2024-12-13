@@ -1,5 +1,13 @@
-"""Strategies"""
+"""
+# Strategies
 
+A strategy model, so the user of this library can implement it owns strategies
+(this is the purpose of this library).  A strategy is built to consume a data
+stream, compute indicators, and produce BUY/SELL signals.
+
+"""
+
+from typing import Union
 from enum import Enum
 from datetime import datetime
 from attrs import define
@@ -32,7 +40,7 @@ class Strategy:
         Init Method. Included for future support.
         """
 
-    def evaluate(self, *args, **kwargs) -> StrategySignal:
+    def evaluate(self, data: Union[dict, None]) -> StrategySignal:
         """
         Evaluate method. Include for future support
         """
