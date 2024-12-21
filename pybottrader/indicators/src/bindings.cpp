@@ -32,7 +32,7 @@ PYBIND11_MODULE(_indicators, m) {
         .def("update", &EMA::update);
 
     py::class_<RSI, Indicator<double>>(m, "RSI")
-        .def(py::init<double, double>(), py::arg("period"), py::arg("mem_size") = 1)
+        .def(py::init<int, int>(), py::arg("period") = 14, py::arg("mem_size") = 1)
         .def("update", &RSI::update,
             py::arg("open_price"),
             py::arg("close_price"));
