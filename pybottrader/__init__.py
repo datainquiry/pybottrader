@@ -18,3 +18,5 @@ Installation:
 pip install pybottrader
 ```
 """
+
+from .indicators import *  # Import the C++ module directly

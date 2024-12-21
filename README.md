@@ -13,8 +13,6 @@ decision-making rules to generate trading signals. A basic trader module is
 included for testing strategies, making the library a versatile framework for
 algorithmic trading experimentation.
 
-## Features
-
 ## Example
 
 Using this library looks like:
@@ -91,3 +89,20 @@ pip install pybottrader
 ```
 
 Shortly, I'm going to release more documentation and more examples.
+
+## Installation Requirements
+
+### Linux
+- GCC/G++ compiler
+- CMake 3.15 or higher
+- Python development headers (python3-dev)
+
+### Windows
+- Visual Studio 2019 or later with C++ build tools
+- CMake 3.15 or higher
+- Windows SDK
+
+### macOS
+- Xcode Command Line Tools
+- CMake 3.15 or higher
+

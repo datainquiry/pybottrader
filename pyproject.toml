@@ -1,6 +1,6 @@
 [project]
 name = "pybottrader"
-version = "0.0.6"
+version = "0.0.7"
 readme = "README.md"
 description = "An experimental Python library to implement trading bots"
 license = {file = "LICENSE"}
@@ -10,6 +10,7 @@ dependencies = [
     "numpy",
     "pandas",
     "yfinance",
+    "pybind11>=2.6.0",
 ]
 
 [project.urls]
@@ -17,26 +18,19 @@ Documentation = "https://jailop.github.io/pybottrader/pybottrader.html"
 Repository = "https://github.com/jailop/pybottrader"
 
 [tool.setuptools]
-package-dir={"" = "src"}
+package-dir={"" = "."}
 
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[project.scripts]
-
-[project.optional-dependencies]
-dev = [
-    "ipython",
-    "jupyter",
-    "jupyterlab",
-    "mypy",
-    "pandas-stubs",
-    "pdoc",
-    "pylint",
-    "pytest",
-    "black",
-    "sphinx",
-    "sphinx-rtd-theme",
-    "sphinx-autodoc-typehints",
+requires = [
+    "setuptools>=42",
+    "cmake>=3.15",
+    "pybind11>=2.6.0",
+    "scikit-build-core>=0.5.0",
 ]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+cmake.minimum-version = "3.15"
+cmake.source-dir = "pybottrader/indicators"
+cmake.build-type = "Release"
+wheel.packages = ["pybottrader"]
