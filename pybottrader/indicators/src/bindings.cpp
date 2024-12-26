@@ -9,18 +9,17 @@ using namespace indicators;
 PYBIND11_MODULE(_indicators, m) {
     m.doc() = "Financial indicators for streaming data implemented in C++";
 
-    py::class_<Indicator<double>>(m, "IndicatorDouble")
+    py::class_<Indicator<double>>(m, "FloatIndicator")
         .def(py::init<int>(), py::arg("mem_size") = 1)
         .def("__getitem__", &Indicator<double>::operator[])
         .def("push", &Indicator<double>::push)
         .def("get", &Indicator<double>::get, py::arg("key") = 0);
 
-    py::class_<Indicator<MACDResult>>(m, "IndicatorMACDResult")
+    py::class_<Indicator<MACDResult>>(m, "MACDIndicator")
         .def(py::init<int>(), py::arg("mem_size") = 1)
         .def("__getitem__", &Indicator<MACDResult>::operator[])
         .def("push", &Indicator<MACDResult>::push)
         .def("get", &Indicator<MACDResult>::get, py::arg("key") = 0);
-
 
     py::class_<MA, Indicator<double>>(m, "MA")
         .def(py::init<int, int>(), py::arg("period"), py::arg("mem_size") = 1)

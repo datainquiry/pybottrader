@@ -5,7 +5,6 @@
 
 #pragma once
 #include <cmath>
-#include <memory>
 #include <vector>
 #include <optional>
 #include <stdexcept>
@@ -108,25 +107,26 @@ public:
 
 class RSI : public Indicator<double> {
 private:  
-    std::unique_ptr<MA> gains;
-    std::unique_ptr<MA> losses;
+    MA gains;
+    MA losses;
 
 public:
     RSI(int period = 14, int mem_size = 1)
-        : Indicator(mem_size), gains(std::make_unique<MA>(period)), losses(std::make_unique<MA>(period)){}
+        : Indicator(mem_size), gains(period), losses(period){}
     double update(double open_price, double close_price) {
         double diff = close_price - open_price;
-        gains->update(diff >= 0.0 ? diff : 0.0);
-        losses->update(diff < 0 ? -diff : 0.0);
-        if (std::isnan(losses->get(0))) {
+        gains.update(diff >= 0.0 ? diff : 0.0);
+        losses.update(diff < 0 ? -diff : 0.0);
+        if (std::isnan(losses[0])) {
             push(std::nan(""));         
         } else {
-            double rsi = 100.0 - 100.0 / (1.0 + gains->get(0) / losses->get(0));
+            double rsi = 100.0 - 100.0 / (1.0 + gains[0] / losses[0]);
             push(rsi);
         }
         return (*this)[0];
     }
 };
+
 
 inline double calculate_roi(double initial_value, double final_value) {
   if (initial_value == 0 || std::isnan(initial_value)) {
@@ -158,29 +158,29 @@ struct MACDResult {
 
 class MACD : public Indicator<MACDResult> {
 private:
-  std::unique_ptr<EMA> short_ema;
-  std::unique_ptr<EMA> long_ema;
-  std::unique_ptr<EMA> diff_ema;
+  EMA short_ema;
+  EMA long_ema;
+  EMA diff_ema;
   int start;
   int counter;
 
 public:
   MACD(int short_period, int long_period, int diff_period, int mem_size = 1)
-      : Indicator(mem_size), short_ema(std::make_unique<EMA>(short_period)),
-        long_ema(std::make_unique<EMA>(long_period)),
-        diff_ema(std::make_unique<EMA>(diff_period)),
+      : Indicator(mem_size), short_ema(short_period),
+        long_ema(long_period),
+        diff_ema(diff_period),
         start(std::max(long_period, short_period)), counter(0) {}
 
   MACDResult update(double value) {
     counter++;
-    short_ema->update(value);
-    long_ema->update(value);
+    short_ema.update(value);
+    long_ema.update(value);
 
     MACDResult result;
     if (counter >= start) {
-      double diff = short_ema->get(0) - long_ema->get(0);
-      diff_ema->update(diff);
-      result = {diff, diff_ema->get(0), diff - diff_ema->get(0)};
+      double diff = short_ema[0] - long_ema[0];
+      diff_ema.update(diff);
+      result = {diff, diff_ema[0], diff - diff_ema[0]};
     } else {
       result = {std::nan(""), std::nan(""), std::nan("")};
     }

@@ -2,19 +2,27 @@ import numpy as np
 import pytest
 from pybottrader.indicators import *
 
-
 def test_indicator():
-    ind = IndicatorDouble(mem_size=5)
+    ind = FloatIndicator(mem_size=5)
     for i in range(5):
         ind.push(i)
     assert abs(ind[0] - 4.0) < 1e-6
     assert abs(ind[-2] - 2.0) < 1e-6
     assert ind[-4] < 1e-6
-    # assert np.isnan(ind[-5])
-    # assert np.isnan(ind[-100])
-    # assert np.isnan(ind[1])
-    # assert np.isnan(ind[100])
+    try:
+        ind[-5]
+    except IndexError:
+        assert True
+    try:
+        ind[-100]
+    except IndexError:
+        assert True
+    try:
+        ind[1]
+    except IndexError:
+        assert True
 
+    # assert np.isnan(ind[100])
 
 def test_ma():
     """
@@ -27,11 +35,9 @@ def test_ma():
     for i, value in enumerate(ts):
         y = ma.update(value)
         if i < period - 1:
-            # assert np.isnan(y)
-            pass
+            assert np.isnan(y)
         else:
             assert y == pytest.approx(ts[i] - 1.0)
-
 
 def test_ma_memory():
     period = 3
@@ -43,7 +49,10 @@ def test_ma_memory():
     assert abs(ma[0] - 9.0) < 1e-6
     assert abs(ma[-1] - 8.0) < 1e-6
     assert abs(ma[-2] - 7.0) < 1e-6
-    # assert np.isnan(ma[-3])
+    try:
+        ma[-3]
+    except IndexError as e:
+        assert True
 
 
 def test_ema():
@@ -58,8 +67,7 @@ def test_ema():
     for i, value in enumerate(ts):
         y = ema.update(value)
         if i < periods - 1:
-            # assert np.isnan(y)
-            pass
+            assert np.isnan(y)
         else:
             assert abs(y - res[i - periods + 1]) < 1e-6
 
@@ -75,7 +83,10 @@ def test_ema_memory():
     assert abs(ema[0] - res[2]) < 1e-6
     assert abs(ema[-1] - res[1]) < 1e-6
     assert abs(ema[-2] - res[0]) < 1e-6
-    # assert np.isnan(ema[-3])
+    try:
+        ema[-3]
+    except IndexError as e:
+        assert True
 
 
 def test_roi():
@@ -87,7 +98,7 @@ def test_roi():
 def test_ROI():
     r = ROI(mem_size=2)
     r.update(10.0)
-    # assert np.isnan(r[0])
+    assert np.isnan(r[0])
     r.update(12.0)
     assert abs(r[0] - 0.2) < 1e-6
     r.update(15.0)
@@ -98,9 +109,9 @@ def test_ROI():
 def test_RSI():
     rsi = RSI(period=3)
     rsi.update(1.0, 2.0)
-    # assert np.isnan(rsi[0])
+    assert np.isnan(rsi[0])
     rsi.update(2.0, 4.0)
-    # assert np.isnan(rsi[0])
+    assert np.isnan(rsi[0])
     rsi.update(4.0, 3.0)
     assert abs(rsi[0] - 75.0) < 1e-6
 
@@ -226,8 +237,7 @@ def test_MACD():
     for i, value in enumerate(ts):
         macd.update(value)
         if i < 33:
-            # assert np.isnan(macd[0].signal)
-            pass
+            assert np.isnan(macd[0].signal)
         elif i == 33:
             assert abs(macd[0].signal - res[i - 33]) < 1e-3
         else:
