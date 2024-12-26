@@ -25,6 +25,10 @@ PYBIND11_MODULE(_indicators, m) {
         .def(py::init<int, int>(), py::arg("period"), py::arg("mem_size") = 1)
         .def("update", &MA::update);
 
+    py::class_<MV, Indicator<double>>(m, "MV")
+        .def(py::init<int, int>(), py::arg("period"), py::arg("mem_size") = 1)
+        .def("update", &MV::update);
+
     py::class_<EMA, Indicator<double>>(m, "EMA")
         .def(py::init<int, double, int>(), 
              py::arg("period"), py::arg("alpha") = 2.0, py::arg("mem_size") = 1)

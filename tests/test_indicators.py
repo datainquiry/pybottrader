@@ -55,6 +55,19 @@ def test_ma_memory():
         assert True
 
 
+def test_mv():
+    """Moving Variance"""
+    period = 3
+    mem_size = 3
+    mv = MV(period, mem_size)
+    ts = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0])
+    for value in ts:
+        mv.update(value)
+    assert abs(mv[0] - 2.0/3.0) < 1e-6
+    assert abs(mv[-1] - 2.0/3.0) < 1e-6
+    assert abs(mv[-2] - 2.0/3.0) < 1e-6
+
+
 def test_ema():
     """
     This test has been adapted from:

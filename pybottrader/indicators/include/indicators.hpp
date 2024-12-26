@@ -72,6 +72,40 @@ public:
   }
 };
 
+/**
+ * MV - Moving Variance
+ */
+class MV : public Indicator<double> {
+private:
+    MA ma;
+    std::vector<double> prevs;
+    int period;
+    int length;
+    int pos;
+public:
+    MV(int period, int mem_size = 1)
+        : Indicator(mem_size), ma(period), prevs(period, 0.0), period(period), length(0), pos(0) {}
+    double update(double value) {
+        if (length < period) {
+            length++;
+        }
+        prevs[pos] = value;
+        pos = (pos + 1) % period;
+        ma.update(value);
+        if (length < period) {
+            push(std::nan(""));
+        } else {
+            double accum = 0.0;
+            for (size_t i = 0; i < prevs.size(); i++) {
+                double diff = prevs[i] - ma[0];
+                accum += diff * diff;
+            }
+            push(accum / period);
+        }
+        return (*this)[0];
+    }
+};
+
 class EMA : public Indicator<double> {
 private:
   int period;
