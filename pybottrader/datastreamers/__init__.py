@@ -32,7 +32,7 @@ class CSVFileStreamer(DataStreamer):
 
     def __init__(self, filename: str):
         self.index = 0
-        self.data = pd.read_csv(filename, parse_dates=True)
+        self.data = pd.read_csv(filename)
 
     def next(self) -> Union[dict, None]:
         if self.index >= len(self.data):

@@ -12,3 +12,6 @@ lint:
 
 typing:
 	mypy .
+
+upload:
+	twine upload -r pybottrader dist/*

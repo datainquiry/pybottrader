@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(indicators)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+# set(CMAKE_CXX_STANDARD 14)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(NOT TARGET pybind11::module)
     find_package(pybind11 REQUIRED)

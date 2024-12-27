@@ -1,6 +1,5 @@
 # PyBotTrader
 
-API Documentation <https://jailop.github.io/pybottrader/pybottrader.html>
 
 PyBotTrader is an experimental Python library designed to help create trading
 bots, particularly for retail traders. It offers tools for real-time financial
@@ -85,7 +84,7 @@ Time                      Pos.      Price        ROI   Valuation  Accum.ROI
 ## Installation
 
 ```sh
-pip install pybottrader
+pip install git+https://github.com/jailop/pybottrader.git
 ```
 
 Shortly, I'm going to release more documentation and more examples.
