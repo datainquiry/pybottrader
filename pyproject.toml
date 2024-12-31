@@ -30,6 +30,7 @@ requires = [
     "pybind11",
     "scikit-build-core",
     "build",
+    "pybind11-stubgen",
 ]
 build-backend = "scikit_build_core.build"
 

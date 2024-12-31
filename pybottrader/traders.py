@@ -8,6 +8,7 @@ useful for back-testing.
 """
 
 from typing import Union
+from datetime import datetime
 from attrs import define
 from .datastreamers import DataStreamer
 from .portfolios import Portfolio
@@ -80,8 +81,9 @@ class Trader:
             status = self.status()
             if status.signal.position != Position.STAY:
                 # A nice output
+                time = datetime.utcfromtimestamp(status.signal.time).strftime("%Y-%m-%d %H:%M:%S")
                 print(
-                    f"{status.signal.time} "
+                    f"{time} "
                     + f"{status.signal.position.name:4} "
                     + f"{status.data['close']:10.2f} "
                     + f"{status.roi * 100.0:10.2f}% "
