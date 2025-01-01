@@ -30,6 +30,8 @@ class HorizontalLine(QLineSeries):
 class LineChart(QWidget):
     def __init__(self, parent=None, title: str = ""):
         super().__init__(parent)
+        self.setMinimumWidth(500)
+        self.setMinimumHeight(400)
         
         # Create layout
         layout = QVBoxLayout(self)

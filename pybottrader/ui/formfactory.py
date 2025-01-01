@@ -1,8 +1,9 @@
+"""Forms Generator"""
+
 from typing import Any, Dict, Type
 import inspect
 from PyQt5.QtWidgets import (
     QWidget,
-#     QVBoxLayout,
     QFormLayout,
     QLineEdit,
     QLabel,
@@ -11,28 +12,78 @@ from PyQt5.QtWidgets import (
     QDateEdit,
     QCompleter,
     QComboBox,
+    QVBoxLayout,
+    QPushButton,
+    QSpacerItem,
+    QSizePolicy,
 )
-from PyQt5.QtCore import pyqtSignal, Qt, QDate
+from PyQt5.QtCore import pyqtSignal, QDate
 from ..types import DateStamp, TickerSymbol, TimeFrame
 
 COMMON_SYMBOLS = [
-    'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA',
-    'BTC/USD', 'ETH/USD', 'BNB/USD',
-    'EUR/USD', 'GBP/USD', 'USD/JPY'
+    "AAPL",
+    "MSFT",
+    "GOOGL",
+    "AMZN",
+    "META",
+    "TSLA",
+    "BTC/USD",
+    "ETH/USD",
+    "BNB/USD",
+    "EUR/USD",
+    "GBP/USD",
+    "USD/JPY",
 ]
 
 TIMEFRAMES = {
-    '1 Minute': '1m',
-    '5 Minutes': '5m',
-    '15 Minutes': '15m',
-    '30 Minutes': '30m',
-    '1 Hour': '1h',
-    '4 Hours': '4h',
-    'Daily': '1d',
-    'Weekly': '1w',
-    'Monthly': '1M'
+    "1 Minute": "1m",
+    "5 Minutes": "5m",
+    "15 Minutes": "15m",
+    "30 Minutes": "30m",
+    "1 Hour": "1h",
+    "4 Hours": "4h",
+    "Daily": "1d",
+    "Weekly": "1w",
+    "Monthly": "1M",
 }
- 
+
+
+class TraderFormFactory(QWidget):
+    """To create forms for data streamer and strategy parameters"""
+
+    values_changed = pyqtSignal(dict)
+
+    def __init__(self, strategy_class: Type, data_streamer_class: Type):
+        """
+        This method uses FormFactory to create a single widget that integrates widgets for the
+        given datastreamer class and the strategy class.
+        """
+        super().__init__()
+        self.setMaximumWidth(300)
+        self.datawidget = FormFactory(data_streamer_class)
+        self.stratwidget = FormFactory(strategy_class)
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+        self.layout.addWidget(self.datawidget)
+        self.layout.addWidget(self.stratwidget)
+        self.button = QPushButton("Analyze")
+        self.button.clicked.connect(self.notify_change)
+        self.layout.addWidget(self.button)
+        spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.layout.addItem(spacer)
+
+    def get_values(self):
+        """Returns the current form values"""
+        return {
+            "data": self.datawidget.get_values(),
+            "strategy": self.stratwidget.get_values(),
+        }
+
+    def notify_change(self, *args):
+        """Emits current values when any input changes"""
+        self.values_changed.emit(self.get_values())
+
+
 class FormFactory(QWidget):
     """Generic widget for Strategy"""
 
@@ -74,7 +125,11 @@ class FormFactory(QWidget):
             self.param_widgets[name] = widget
             self._connect_widget_signal(widget)
             label_text = param_labels.get(name, {})
-            label = name.replace("_", " ").title() if "label" not in label_text else QLabel(label_text["label"])
+            label = (
+                name.replace("_", " ").title()
+                if "label" not in label_text
+                else QLabel(label_text["label"])
+            )
             # label = QLabel(label_text)
             if name in param_labels:
                 help_text = param_labels[name]
@@ -102,12 +157,12 @@ class FormFactory(QWidget):
             widget.setCalendarPopup(True)
             widget.setDisplayFormat("yyyy-MM-dd")
             widget.setDate(QDate.currentDate())
-#             default_start = QDate.currentDate().addYears(-1)
-#             self.start_date.setDate(default_start)
-#             self.start_date.setMinimumDate(QDate(1970, 1, 1))
-#             self.start_date.setMaximumDate(QDate.currentDate())
-#             self.start_date.dateChanged.connect(self._notify_change)
-#             form_layout.addRow("Start Date:", self.start_date)
+        #             default_start = QDate.currentDate().addYears(-1)
+        #             self.start_date.setDate(default_start)
+        #             self.start_date.setMinimumDate(QDate(1970, 1, 1))
+        #             self.start_date.setMaximumDate(QDate.currentDate())
+        #             self.start_date.dateChanged.connect(self._notify_change)
+        #             form_layout.addRow("Start Date:", self.start_date)
         elif type_hint == TickerSymbol:
             widget = QLineEdit()
             widget.setPlaceholderText("Enter symbol (e.g., AAPL)")
@@ -121,7 +176,7 @@ class FormFactory(QWidget):
             widget = QComboBox()
             for key, value in TIMEFRAMES.items():
                 widget.addItem(key, value)
-            widget.setCurrentText('Daily')
+            widget.setCurrentText("Daily")
             # widget.currentTextChanged.connect(self._notify_change)
             # form_layout.addRow("Timeframe", self.timeframe_input)
         else:
