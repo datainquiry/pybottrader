@@ -1,2 +1,2 @@
 all:
-	sphinx-build -M html source/ .
+	sphinx-build source/ .

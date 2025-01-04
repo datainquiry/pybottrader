@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Indicators &#8212; PyBotTrader 0.0.6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=1fd71caa"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="PyBotTrader documentation" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="indicators">
+<h1>Indicators<a class="headerlink" href="#indicators" title="Link to this heading">¶</a></h1>
+<p>Indicators are aggregate measurements of financial data which intend is to
+reveal patterns and provide insights for decision making. In PyBotTrader,
+indicators are the most basic building block to implement trading algorithms.</p>
+<p>There exist many libraries to compute indicators, like <cite>ta-lib</cite>, however
+PyBotTrader provides its own implementations designed for streaming data.
+Instead of making calculations from scratch at every moment, indicators in
+PyBotTrader keep memory of the previous results and get just updated when new
+data arrives. This is a more efficient approach for timed data.</p>
+<p>All the available indicators in PyBotTrader share the same interface. Once they
+have been initialized, you can call the <code class="docutils literal notranslate"><span class="pre">update</span></code> method to compute new data.
+For example, one of the more basic indicators is the simple moving average,
+designated as <code class="docutils literal notranslate"><span class="pre">MA</span></code> in PyBotTrader. This represents the average of the <cite>n</cite> most
+recent data points.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pybottrader.indicators</span> <span class="kn">import</span> <span class="n">MA</span>
+
+<span class="n">ma</span> <span class="o">=</span> <span class="n">MA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Output is 2</span>
+
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Output is 3</span>
+</pre></div>
+</div>
+<p>In the previous code examples, a moving average instance is created to represent
+the average of the last three data points. To access the value of the moving
+average, array notation is used. A zero index correspond to the current moment:
+<code class="docutils literal notranslate"><span class="pre">ma[0]</span></code>.</p>
+<p>By default, indicators in PyBotTrader only keep memory of the most recent value.
+In the previous example, when a new data point is captured, the indicator value
+is recomputed and the previous value is forgoten. However, you are able to
+modify this behavior by defining how many values to be remembered assinging a
+value to the argmument <code class="docutils literal notranslate"><span class="pre">mem_size</span></code> when an indicator is created.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pybottrader.indicators</span> <span class="kn">import</span> <span class="n">MA</span>
+
+<span class="n">ma</span> <span class="o">=</span> <span class="n">MA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mem_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># Output is 4</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Output is 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ma</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>  <span class="c1"># Error, invalid index</span>
+</pre></div>
+</div>
+<p>In the previous example, a moving average object its configurated to remind two
+values, the current one is <code class="docutils literal notranslate"><span class="pre">ma[0]</span></code> and the previous one is <code class="docutils literal notranslate"><span class="pre">ma[-1]</span></code>. Observe
+that to access previous values, negative indeces are used. Because the memory
+size is only for two values, trying to access <code class="docutils literal notranslate"><span class="pre">ma[-2]</span></code> produces an exception.</p>
+<p>Using negative indeces can seem strange for sotware developers, but it is a
+natural way to represent past events when the current moment is designed with
+the <code class="docutils literal notranslate"><span class="pre">0</span></code> index.  Morever, under this logic, positive indices can be used to
+represent future events.</p>
+<p>Indicators in PyBotTrader are implemented in C++ instead of Python. In that way,
+your running code can take advantage of the speed and memory locality in your
+system.</p>
+<p>At this moment, a limited number of indicators is implemented. In future
+versions, more indicators will be included.</p>
+<section id="moving-average">
+<h2>Moving Average<a class="headerlink" href="#moving-average" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MA</span><span class="p">(</span><span class="nb">int</span> <span class="n">period</span><span class="p">,</span> <span class="nb">int</span> <span class="n">mem_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\text{MA}_n = \frac{1}{n}\sum_{i =1}^n x_i\\\text{MA}_{t,n} = \frac{1}{n}\sum_{i =t - n + 1}^t x_i\end{aligned}\end{align} \]</div>
+<p>The moving average is used to determine the trend direction of a variable. It is
+calculated by adding up data points during a specific period divided by the
+number of time periods.</p>
+</section>
+<section id="moving-variance">
+<h2>Moving Variance<a class="headerlink" href="#moving-variance" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MV</span><span class="p">(</span><span class="nb">int</span> <span class="n">period</span><span class="p">,</span> <span class="nb">int</span> <span class="n">mem_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\text{MV}_n = \frac{1}{n} \sum_{i=1}^n (x_i - \text{MA}n)^2\\\text{MV}_{t,n} = \frac{1}{n} \sum_{i=t - n + 1}^t (x_i - \text{MA}_{t,n})^2\end{aligned}\end{align} \]</div>
+</section>
+<section id="exponential-moving-average">
+<h2>Exponential Moving Average<a class="headerlink" href="#exponential-moving-average" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMA</span><span class="p">(</span><span class="nb">int</span> <span class="n">period</span><span class="p">,</span> <span class="n">double</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="nb">int</span> <span class="n">mem_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="return-of-investment">
+<h2>Return of Investment<a class="headerlink" href="#return-of-investment" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ROI</span><span class="p">(</span><span class="nb">int</span> <span class="n">mem_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="relative-strength-index">
+<h2>Relative Strength Index<a class="headerlink" href="#relative-strength-index" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RSI</span><span class="p">(</span><span class="nb">int</span> <span class="n">period</span> <span class="o">=</span> <span class="mi">14</span><span class="p">,</span> <span class="nb">int</span> <span class="n">mem_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="moving-average-convergence-divergence">
+<h2>Moving Average Convergence/Divergence<a class="headerlink" href="#moving-average-convergence-divergence" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MACD</span><span class="p">(</span><span class="nb">int</span> <span class="n">short_period</span><span class="p">,</span> <span class="nb">int</span> <span class="n">long_period</span><span class="p">,</span> <span class="nb">int</span> <span class="n">diff_period</span><span class="p">,</span> <span class="nb">int</span> <span class="n">mem_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="average-true-range">
+<h2>Average True Range<a class="headerlink" href="#average-true-range" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATR</span><span class="p">(</span><span class="nb">int</span> <span class="n">period</span><span class="p">,</span> <span class="nb">int</span> <span class="n">mem_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PyBotTrader</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Indicators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#moving-average">Moving Average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-variance">Moving Variance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exponential-moving-average">Exponential Moving Average</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#return-of-investment">Return of Investment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relative-strength-index">Relative Strength Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-average-convergence-divergence">Moving Average Convergence/Divergence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#average-true-range">Average True Range</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">PyBotTrader documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Jaime L..
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/indicators.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -3,6 +3,7 @@ Data streamear for yfinance
 """
 
 from typing import Union
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import yfinance
@@ -16,9 +17,11 @@ class YFHistory(DataStreamer):
     index = 0
     data: pd.DataFrame
 
-    def __init__(self, symbol: TickerSymbol, start : DateStamp, end: DateStamp, interval: TimeFrame = "1d"):
+    def __init__(self, symbol: TickerSymbol, start : DateStamp, end: Union[DateStamp, None] = None, interval: TimeFrame = "1d"):
         super().__init__()
         ticker = yfinance.Ticker(symbol)
+        if end is None:
+            end = datetime.now().isoformat()
         self.data = ticker.history(start=start, end=end, interval=interval)
         self.data.columns = [col.lower() for col in self.data.columns]
         self.data.index.names = ["time"]
