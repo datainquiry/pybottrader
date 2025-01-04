@@ -16,7 +16,7 @@ release = '0.0.8'
 
 extensions = []
 
-templates_path = ['_templates']
+templates_path = ['templates']
 exclude_patterns = []
 html_baseurl = 'https://jailop.github.io/pybottrader/' 
 
@@ -25,4 +25,4 @@ html_baseurl = 'https://jailop.github.io/pybottrader/'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'alabaster'
-html_static_path = ['_static']
+html_static_path = ['static']
