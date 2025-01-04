@@ -18,7 +18,7 @@ extensions = []
 
 templates_path = ['_templates']
 exclude_patterns = []
-
+html_baseurl = 'https://jailop.github.io/pybottrader/' 
 
 
 # -- Options for HTML output -------------------------------------------------
