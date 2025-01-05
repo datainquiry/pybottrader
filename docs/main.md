@@ -1,5 +1,21 @@
-Indicators
-==========
+% PyBotTrader documentation
+% Jaime Lopez
+% Version 0.0.8 - Jan. 2025
+
+# Introduction
+
+PyBotTrader is an experimental Python library designed to help on creating
+trading bots, intended for retail traders. It offers tools for real-time
+financial analysis, including indicators like moving averages (like MA, EMA,
+RSI, MACD, and ROI), which update dynamically with new data. The library
+includes data streamers to handle sequential data from sources like CSV files or
+the YFinance API, and basic portfolio managers for back-testing simple buy/sell
+strategies. Users can define custom strategies that integrate data streams,
+indicators, and decision-making rules to generate trading signals. A basic
+trader module is included for testing strategies, making the library a versatile
+framework for algorithmic trading experimentation.
+
+# Indicators
 
 Indicators are aggregate measurements of financial data which intend is to
 reveal patterns and provide insights for decision making. In PyBotTrader,
@@ -17,47 +33,46 @@ For example, one of the more basic indicators is the simple moving average,
 designated as ``MA`` in PyBotTrader. This represents the average of the `n` most
 recent data points.
 
-.. code-block::
+```python
+from pybottrader.indicators import MA
 
-    from pybottrader.indicators import MA
+ma = MA(period=3)
+ma.update(1)
+ma.update(2)
+ma.update(3)
 
-    ma = MA(period=3)
-    ma.update(1)
-    ma.update(2)
-    ma.update(3)
+print(ma[0])  # Output is 2
 
-    print(ma[0])  # Output is 2
+ma.update(4)
 
-    ma.update(4)
-    
-    print(ma[0])  # Output is 3
-
+print(ma[0])  # Output is 3
+```
 
 In the previous code examples, a moving average instance is created to represent
 the average of the last three data points. To access the value of the moving
 average, array notation is used. A zero index correspond to the current moment:
-``ma[0]``.
+`ma[0]`.
 
 By default, indicators in PyBotTrader only keep memory of the most recent value.
 In the previous example, when a new data point is captured, the indicator value
 is recomputed and the previous value is forgoten. However, you are able to
 modify this behavior by defining how many values to be remembered assinging a
-value to the argmument ``mem_size`` when an indicator is created.
+value to the argmument `mem_size` when an indicator is created.
 
-.. code-block::
+```python
+from pybottrader.indicators import MA
 
-    from pybottrader.indicators import MA
+ma = MA(period=3, mem_size=2)
+ma.update(1)
+ma.update(2)
+ma.update(3)
+ma.update(4)
+ma.update(5)
 
-    ma = MA(period=3, mem_size=2)
-    ma.update(1)
-    ma.update(2)
-    ma.update(3)
-    ma.update(4)
-    ma.update(5)
-    
-    print(ma[0])   # Output is 4
-    print(ma[-1])  # Output is 3
-    print(ma[-2])  # Error, invalid index
+print(ma[0])   # Output is 4
+print(ma[-1])  # Output is 3
+print(ma[-2])  # Error, invalid index
+```
 
 In the previous example, a moving average object its configurated to remind two
 values, the current one is ``ma[0]`` and the previous one is ``ma[-1]``. Observe
@@ -76,68 +91,59 @@ system.
 At this moment, a limited number of indicators is implemented. In future
 versions, more indicators will be included.
 
-Moving Average
---------------
+# List of Indicators
 
-.. code-block::
+## Moving Average
 
-   MA(int period, int mem_size = 1)
+```c++
+MA(int period, int mem_size = 1)
+```
 
-.. math::
+$$\text{MA}_n = \frac{1}{n}\sum_{i =1}^n x_i$$
 
-   \text{MA}_n = \frac{1}{n}\sum_{i =1}^n x_i
-
-   \text{MA}_{t,n} = \frac{1}{n}\sum_{i =t - n + 1}^t x_i
+$$\text{MA}_{t,n} = \frac{1}{n}\sum_{i =t - n + 1}^t x_i$$
 
 The moving average is used to determine the trend direction of a variable. It is
 calculated by adding up data points during a specific period divided by the
 number of time periods.
 
-Moving Variance
----------------
+## Moving Variance
 
-.. code-block::
+```c++
+MV(int period, int mem_size = 1)
+```
 
-   MV(int period, int mem_size = 1)
+$$\text{MV}_n = \frac{1}{n} \sum_{i=1}^n (x_i - \text{MA}n)^2$$
 
-.. math::
+$$\text{MV}_{t,n} = \frac{1}{n} \sum_{i=t - n + 1}^t (x_i - \text{MA}_{t,n})^2$$
 
-   \text{MV}_n = \frac{1}{n} \sum_{i=1}^n (x_i - \text{MA}n)^2
+## Exponential Moving Average
 
-   \text{MV}_{t,n} = \frac{1}{n} \sum_{i=t - n + 1}^t (x_i - \text{MA}_{t,n})^2
+```c++
+EMA(int period, double alpha = 2.0, int mem_size=1)
+```
 
-Exponential Moving Average
---------------------------
+## Return of Investment
 
-.. code-block::
+```c++
+ROI(int mem_size = 1)
+```
 
-   EMA(int period, double alpha = 2.0, int mem_size=1)
+## Relative Strength Index
 
-Return of Investment
---------------------
+```c++
+RSI(int period = 14, int mem_size = 1)
+```
 
-.. code-block::
+## Moving Average Convergence/Divergence
 
-   ROI(int mem_size = 1)
+```c++
+MACD(int short_period, int long_period, int diff_period, int mem_size = 1)
+```
 
-Relative Strength Index
------------------------
+## Average True Range
 
-.. code-block::
 
-   RSI(int period = 14, int mem_size = 1)
-
-Moving Average Convergence/Divergence
--------------------------------------
-
-.. code-block::
-
-   MACD(int short_period, int long_period, int diff_period, int mem_size = 1)
-
-Average True Range
-------------------
-
-.. code-block::
-
-   ATR(int period, int mem_size = 1)
-
+```c++
+ATR(int period, int mem_size = 1)
+```
