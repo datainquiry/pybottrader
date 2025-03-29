@@ -47,8 +47,8 @@ class BaseWindow(QMainWindow):
             status = trader.status()
             series.update({"time": status.signal.time, "value": strat.rsi[0]})
         self.chart.add_series(series)
-        # self.chart.add_horizontal_line(strat_params["lower_band"], "Lower Band")
-        # self.chart.add_horizontal_line(strat_params["upper_band"], "Upper Band")
+        self.chart.add_horizontal_line(strat_params["lower_band"], "Lower Band")
+        self.chart.add_horizontal_line(strat_params["upper_band"], "Upper Band")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

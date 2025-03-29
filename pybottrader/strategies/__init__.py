@@ -25,7 +25,7 @@ class Position(Enum):
 class StrategySignal:
     """To report computations of an strategy"""
 
-    time: datetime = datetime.now()
+    time: datetime = datetime.now().timestamp()
     position: Position = Position.STAY
     price: float = 0.0
     ticker: str = ""

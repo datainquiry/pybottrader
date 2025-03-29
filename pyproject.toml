@@ -9,6 +9,8 @@ dependencies = [
     "attrs",
     "numpy",
     "pandas",
+    "requests",
+    "coinbase-advanced-py",
     "yfinance",
     "pybind11",
     "twine",

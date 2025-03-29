@@ -72,7 +72,7 @@ class Trader:
         """A default runner"""
         # A nice header
         print(
-            "{:25} {:4} {:>10} {:>10}  {:>10} {:>10}".format(  # pylint: disable=consider-using-f-string
+            "{:19} {:4} {:>9} {:>10}  {:>11} {:>11}".format(  # pylint: disable=consider-using-f-string
                 "Time", "Pos.", "Price", "ROI", "Valuation", "Accum.ROI"
             )
         )
