@@ -17,6 +17,8 @@ class DataStreamer:
 
     index = 0
     data = pd.DataFrame()
+    symbol = ""
+    label = ""
 
     def __init__(self):
         """Init method"""
@@ -39,7 +41,6 @@ class DataStreamer:
         """Resets the counter to 0"""
         self.index = 0
 
-
     @staticmethod
     def labels() -> dict:
         """Labeling helper"""
@@ -49,7 +50,6 @@ class DataStreamer:
             "end": {"label": "End", "help": "Ending datetime stamp"},
             "invertal": {"label": "Interval", "help": "Aggregation period"},
         }
-
 
 
 class CSVFileStreamer(DataStreamer):
@@ -63,6 +63,7 @@ class CSVFileStreamer(DataStreamer):
     def __init__(self, filename: str):
         self.index = 0
         self.data = pd.read_csv(filename)
+
 
 #     def next(self) -> Optional[dict]:
 #         if self.index >= len(self.data):

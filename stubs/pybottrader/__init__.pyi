@@ -19,6 +19,7 @@ Installation:
 pip install pybottrader
 ```
 """
+
 from __future__ import annotations
 from pybottrader.indicators._indicators import ATR
 from pybottrader.indicators._indicators import EMA
@@ -32,4 +33,18 @@ from pybottrader.indicators._indicators import ROI
 from pybottrader.indicators._indicators import RSI
 from pybottrader.indicators._indicators import roi
 from . import indicators
-__all__ = ['ATR', 'EMA', 'FloatIndicator', 'MA', 'MACD', 'MACDIndicator', 'MACDResult', 'MV', 'ROI', 'RSI', 'indicators', 'roi']
+
+__all__ = [
+    "ATR",
+    "EMA",
+    "FloatIndicator",
+    "MA",
+    "MACD",
+    "MACDIndicator",
+    "MACDResult",
+    "MV",
+    "ROI",
+    "RSI",
+    "indicators",
+    "roi",
+]

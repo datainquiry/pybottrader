@@ -21,6 +21,7 @@ class YFHistory(DataStreamer):
         interval: TimeFrame = "1d",
     ):
         super().__init__()
+        self.symbol = symbol
         ticker = yfinance.Ticker(symbol)
         if end is None:
             end = datetime.now().isoformat()

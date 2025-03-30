@@ -18,7 +18,6 @@ LIMIT = 350  # Limit set by Coinbase
 class CBHistory(DataStreamer):
     """Using Coinbase as a data streamer"""
 
-    symbol: TickerSymbol
     start: int
     end: int
     period: str
@@ -83,8 +82,9 @@ class CBHistory(DataStreamer):
                 self.symbol, self.start, self.end, self.period
             )
             self.data = (
-                pd.DataFrame([candle.to_dict() for candle in response["candles"]])
-                .rename(columns={"start": "time"})
+                pd.DataFrame(
+                    [candle.to_dict() for candle in response["candles"]]
+                ).rename(columns={"start": "time"})
                 # .set_index("time")
             )
             for col in ["open", "close", "low", "high", "volume"]:
