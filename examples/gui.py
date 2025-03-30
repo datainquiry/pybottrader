@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 from pybottrader.ui.candlestick import CandlestickChart, CandleStickSeries
 from pybottrader.datastreamers import CSVFileStreamer
 
+
 class DataChart(QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         layout = QVBoxLayout(self)
         widget = CandlestickChart(self)
@@ -19,6 +20,7 @@ class DataChart(QWidget):
         layout.addWidget(widget)
         self.setLayout(layout)
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -27,11 +29,13 @@ class MainWindow(QMainWindow):
         widget = DataChart(self)
         self.setCentralWidget(widget)
 
+
 def run():
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     run()

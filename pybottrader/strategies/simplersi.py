@@ -1,7 +1,12 @@
-from ..indicators import RSI
-from . import Strategy, StrategySignal, Position
+"""
+A basic RSI strategy
+"""
 
-class SimpleRSIStrategy(Strategy):
+from ..indicators import RSI
+from .base import Strategy, StrategySignal, Position
+
+
+class SimpleRSI(Strategy):
     """A simple strategy based on the RSI indicator"""
 
     rsi: RSI
@@ -16,13 +21,22 @@ class SimpleRSIStrategy(Strategy):
 
     @staticmethod
     def labels() -> dict:
+        """Labels for GUI builder"""
         return {
-            'lower_band': {'label': 'Lower Band', 'help': 'Band below which price is considered underbought'},
-            'upper_band': {'label': 'Upper Band', 'help': 'Band above which price is considered overbought'},
+            "lower_band": {
+                "label": "Lower Band",
+                "help": "Band below which price is considered underbought",
+            },
+            "upper_band": {
+                "label": "Upper Band",
+                "help": "Band above which price is considered overbought",
+            },
         }
 
     def evaluate(self, data) -> StrategySignal:
         # default positio STAY
+        if "time" not in data or "open" not in data or "close" not in data:
+            return StrategySignal()
         position = Position.STAY
         # Update the RSI indicator
         self.rsi.update(open_price=data["open"], close_price=data["close"])
@@ -33,6 +47,8 @@ class SimpleRSIStrategy(Strategy):
         elif self.last_flip == Position.BUY and self.rsi[0] > self.upper_band:
             position = Position.SELL
             self.last_flip = Position.SELL
-        return StrategySignal(time=data["time"], price=data["close"], position=position)
-
-
+        return StrategySignal(
+            time=data["time"],
+            price=data["close"],
+            position=position,
+        )

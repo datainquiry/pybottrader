@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 from pybottrader.indicators import *
 
+
 def test_indicator():
     ind = FloatIndicator(mem_size=5)
     for i in range(5):
@@ -24,6 +25,7 @@ def test_indicator():
 
     # assert np.isnan(ind[100])
 
+
 def test_ma():
     """
     This test has been adapted from:
@@ -38,6 +40,7 @@ def test_ma():
             assert np.isnan(y)
         else:
             assert y == pytest.approx(ts[i] - 1.0)
+
 
 def test_ma_memory():
     period = 3
@@ -63,9 +66,9 @@ def test_mv():
     ts = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0])
     for value in ts:
         mv.update(value)
-    assert abs(mv[0] - 2.0/3.0) < 1e-6
-    assert abs(mv[-1] - 2.0/3.0) < 1e-6
-    assert abs(mv[-2] - 2.0/3.0) < 1e-6
+    assert abs(mv[0] - 2.0 / 3.0) < 1e-6
+    assert abs(mv[-1] - 2.0 / 3.0) < 1e-6
+    assert abs(mv[-2] - 2.0 / 3.0) < 1e-6
 
 
 def test_ema():

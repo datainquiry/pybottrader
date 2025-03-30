@@ -10,13 +10,14 @@ from typing import Any, Dict, Type
 import inspect
 from PyQt5.QtWidgets import (
     QWidget,
-#     QVBoxLayout,
+    #     QVBoxLayout,
     QFormLayout,
     QLineEdit,
     QLabel,
     QSpinBox,
     QDoubleSpinBox,
 )
+
 # from PyQt5.QtCore import pyqtSignal
 from ..strategies import Strategy
 

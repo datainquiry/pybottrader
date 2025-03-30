@@ -3,12 +3,14 @@ from PyQt5.QtChart import QChart, QChartView, QCandlestickSeries, QCandlestickSe
 from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt
 
+
 class CandleStickSeries(QCandlestickSeries):
     def __init__(self):
         super().__init__()
         self.setName("Price")
         self.setIncreasingColor(Qt.green)
         self.setDecreasingColor(Qt.red)
+
     def update(self, data):
         candlestick_set = QCandlestickSet(
             data["open"],
@@ -19,8 +21,9 @@ class CandleStickSeries(QCandlestickSeries):
         )
         self.append(candlestick_set)
 
+
 class CandlestickChart(QWidget):
-    def __init__(self, parent = None, title: str = ""):
+    def __init__(self, parent=None, title: str = ""):
         super().__init__(parent)
         layout = QVBoxLayout(self)
         self.chart = QChart()
@@ -31,6 +34,7 @@ class CandlestickChart(QWidget):
         chart_view.setDragMode(QChartView.ScrollHandDrag)
         layout.addWidget(chart_view)
         self.setLayout(layout)
+
     def add_series(self, series):
         self.chart.addSeries(series)
         self.chart.createDefaultAxes()

@@ -19,19 +19,19 @@ class Portfolio:
     last_position: Position
     last_exchange: str
     last_price: float
-    last_ticker: str
+    last_symbol: str
 
     def __init__(self, cash: float = 1000.0):
         """Init method"""
         self.initial_cash = cash
         self.last_position = Position.STAY
         self.last_price = 0.0
-        self.last_ticker = ""
+        self.last_symbol = ""
         self.last_exchange = ""
 
     def process(self, signal: StrategySignal):
         """Process signal"""
-        self.last_ticker = signal.ticker
+        self.last_symbol = signal.symbol
         self.last_price = signal.price
         self.last_position = signal.position
         self.last_exchange = signal.exchange

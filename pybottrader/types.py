@@ -1,5 +1,7 @@
-from typing import NewType
+"""Data types"""
 
-DateStamp = NewType("DateStamp", str)
+from typing import NewType, Literal
+
 TickerSymbol = NewType("TickerSymbol", str)
-TimeFrame = NewType("TimeFrame", str)
+DateStamp = NewType("DateStamp", str)
+TimeFrame = NewType("TimeFrame", Literal["1m", "5m", "15m", "30m", "1h", "1d"])

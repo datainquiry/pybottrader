@@ -35,6 +35,7 @@ class Trader:
     strategy: Strategy
     last_result: Union[TradingIteration, None] = None
     last_valuation: float = 0.0
+    strat_name: str = ""
 
     def __init__(
         self,
@@ -46,6 +47,7 @@ class Trader:
         self.datastream = datastream
         self.portfolio = portfolio
         self.strategy = strategy
+        self.strat_name = type(self.strategy).__name__
 
     def next(self) -> bool:
         """Perfoms a trading iteration"""
@@ -53,6 +55,8 @@ class Trader:
         if obs is None:
             return False
         signal = self.strategy.evaluate(data=obs)
+        signal.name = self.strat_name
+        signal.symbol = self.datastream.symbol
         self.portfolio.process(signal)
         self.last_result = TradingIteration(
             signal=signal,
@@ -72,7 +76,7 @@ class Trader:
         """A default runner"""
         # A nice header
         print(
-            "{:25} {:4} {:>10} {:>10}  {:>10} {:>10}".format(  # pylint: disable=consider-using-f-string
+            "{:19} {:4} {:>9} {:>10}  {:>11} {:>11}".format(  # pylint: disable=consider-using-f-string
                 "Time", "Pos.", "Price", "ROI", "Valuation", "Accum.ROI"
             )
         )
@@ -81,7 +85,9 @@ class Trader:
             status = self.status()
             if status.signal.position != Position.STAY:
                 # A nice output
-                time = datetime.utcfromtimestamp(status.signal.time).strftime("%Y-%m-%d %H:%M:%S")
+                time = datetime.utcfromtimestamp(status.signal.time).strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
                 print(
                     f"{time} "
                     + f"{status.signal.position.name:4} "
