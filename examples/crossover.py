@@ -12,11 +12,11 @@ from pybottrader.strategies import CrossOver
 from pybottrader.traders import Trader
 
 # Apple, daily data from 2021 to 2023
-datastream = YFHistory("AAPL", start="2021-01-01", end="2023-12-31")
+datastream = YFHistory("BTC-USD", start="2021-01-01", end="2024-12-31")
 # Start with USD 1,000
 portfolio = DummyPortfolio(1000.0)
 # My strategy
-strategy = CrossOver(short_period=10, long_period=30, threshold=0.05)
+strategy = CrossOver(short_period=30, long_period=120, threshold=0.05)
 # Putting everything eogether
 trader = Trader(strategy, portfolio, datastream)
 # A default runner, but you can implement your own loop
