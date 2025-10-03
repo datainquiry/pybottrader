@@ -1,6 +1,3 @@
-doc:
-	pdoc src/pybottrader --output-dir docs/api
-
 format:
 	black .
 
@@ -15,3 +12,6 @@ typing:
 
 upload:
 	twine upload -r pybottrader dist/*
+
+doc:
+	pdoc pybottrader -o docs
