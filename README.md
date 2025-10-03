@@ -1,5 +1,6 @@
 # PyBotTrader
 
+API docs: <https://datainquiry.github.io/pybottrader>
 
 PyBotTrader is an experimental Python library designed to help create trading
 bots, particularly for retail traders. It offers tools for real-time financial
