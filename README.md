@@ -2,6 +2,8 @@
 
 API docs: <https://datainquiry.github.io/pybottrader>
 
+**Notice**: This library is experimental. Breaking changes can occur.
+
 PyBotTrader is an experimental Python library designed to help create trading
 bots, particularly for retail traders. It offers tools for real-time financial
 analysis, including indicators like moving averages (like MA, EMA, RSI, MACD, and
