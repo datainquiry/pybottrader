@@ -9,7 +9,7 @@ from datetime import datetime
 import pandas as pd
 from requests.exceptions import HTTPError
 from coinbase.rest import RESTClient
-from . import DataStreamer
+from .base import DataStreamer
 from ..types import DateStamp, TickerSymbol, TimeFrame
 
 LIMIT = 350  # Limit set by Coinbase

@@ -6,7 +6,7 @@ from typing import Union
 from datetime import datetime
 import numpy as np
 import yfinance
-from . import DataStreamer
+from .base import DataStreamer
 from ..types import DateStamp, TickerSymbol, TimeFrame
 
 

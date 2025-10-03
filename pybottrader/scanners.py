@@ -8,7 +8,7 @@ set of strategies being applied.
 
 from typing import List
 from datetime import datetime
-from .datastreamers import DataStreamer
+from .datastreamers.base import DataStreamer
 from .strategies import Strategy, StrategySignal, Position
 
 

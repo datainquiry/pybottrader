@@ -10,7 +10,7 @@ useful for back-testing.
 from typing import Union
 from datetime import datetime
 from attrs import define
-from .datastreamers import DataStreamer
+from .datastreamers.base import DataStreamer
 from .portfolios import Portfolio
 from .strategies import Strategy, Position, StrategySignal
 from .indicators import roi
