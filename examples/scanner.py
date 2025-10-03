@@ -11,7 +11,7 @@ from pybottrader.strategies import (
     CrossOver,
 )
 # The data stream is from Yahoo Finance (c)
-from pybottrader.datastreamers.yfinance import YFHistory
+from pybottrader.datastreamers import YFHistory
 # The default scanner
 from pybottrader.scanners import Scanner
 
