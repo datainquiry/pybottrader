@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Type
 import inspect
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget,
     QFormLayout,
     QLineEdit,
@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PyQt5.QtCore import pyqtSignal, QDate
+from PyQt6.QtCore import pyqtSignal, QDate
 from ..types import DateStamp, TickerSymbol, TimeFrame
 
 COMMON_SYMBOLS = [

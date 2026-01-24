@@ -1,6 +1,17 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
-from pybottrader.ui.candlestick import CandlestickChart, CandleStickSeries
+
+# Check if UI components are available before importing
+try:
+    from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+    from pybottrader.ui.candlestick import CandlestickChart, CandleStickSeries
+
+    UI_AVAILABLE = True
+except ImportError as e:
+    print("UI components not available. Install with: pip install pybottrader[ui]")
+    print(f"Import error: {e}")
+    UI_AVAILABLE = False
+    sys.exit(1)
+
 from pybottrader.datastreamers import CSVFileStreamer
 
 
@@ -34,7 +45,7 @@ def run():
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

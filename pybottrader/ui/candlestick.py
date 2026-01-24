@@ -1,15 +1,15 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
-from PyQt5.QtChart import QChart, QChartView, QCandlestickSeries, QCandlestickSet
-from PyQt5.QtGui import QPainter
-from PyQt5.QtCore import Qt
+from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from PyQt6.QtCharts import QChart, QChartView, QCandlestickSeries, QCandlestickSet
+from PyQt6.QtGui import QPainter
+from PyQt6.QtCore import Qt
 
 
 class CandleStickSeries(QCandlestickSeries):
     def __init__(self):
         super().__init__()
         self.setName("Price")
-        self.setIncreasingColor(Qt.green)
-        self.setDecreasingColor(Qt.red)
+        self.setIncreasingColor(Qt.GlobalColor.green)
+        self.setDecreasingColor(Qt.GlobalColor.red)
 
     def update(self, data):
         candlestick_set = QCandlestickSet(
@@ -29,9 +29,9 @@ class CandlestickChart(QWidget):
         self.chart = QChart()
         self.chart.setTitle(title)
         chart_view = QChartView(self.chart)
-        chart_view.setRenderHint(QPainter.Antialiasing)
-        chart_view.setRubberBand(QChartView.RectangleRubberBand)
-        chart_view.setDragMode(QChartView.ScrollHandDrag)
+        chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
+        chart_view.setRubberBand(QChartView.RubberBand.RectangleRubberBand)
+        chart_view.setDragMode(QChartView.DragMode.ScrollHandDrag)
         layout.addWidget(chart_view)
         self.setLayout(layout)
 
