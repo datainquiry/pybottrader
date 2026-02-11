@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QFormLayout,
@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import (
     QDateEdit,
 )
 
-# from PyQt5.QtCore import QDate, pyqtSignal
-from PyQt5.QtCore import QDate
+# from PyQt6.QtCore import QDate, pyqtSignal
+from PyQt6.QtCore import QDate
 from typing import Dict, Any, Callable
 import datetime
 

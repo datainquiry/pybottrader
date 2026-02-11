@@ -12,4 +12,3 @@ import pandas as pd
 from .yfinance import YFHistory
 from .base import DataStreamer
 from .base import CSVFileStreamer
-

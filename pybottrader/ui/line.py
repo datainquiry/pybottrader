@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
-from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis
-from PyQt5.QtGui import QPainter, QPen
-from PyQt5.QtCore import Qt, QPointF
+from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis
+from PyQt6.QtGui import QPainter, QPen
+from PyQt6.QtCore import Qt, QPointF
 
 
 class LineSeries(QLineSeries):
@@ -16,7 +16,10 @@ class LineSeries(QLineSeries):
 
 class HorizontalLine(QLineSeries):
     def __init__(
-        self, value: float, name: str = "Level", color: Qt.GlobalColor = Qt.red
+        self,
+        value: float,
+        name: str = "Level",
+        color: Qt.GlobalColor = Qt.GlobalColor.red,
     ):
         super().__init__()
         self.setName(name)
@@ -47,9 +50,9 @@ class LineChart(QWidget):
 
         # Create chart view
         chart_view = QChartView(self.chart)
-        chart_view.setRenderHint(QPainter.Antialiasing)
-        chart_view.setRubberBand(QChartView.RectangleRubberBand)
-        chart_view.setDragMode(QChartView.ScrollHandDrag)
+        chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
+        chart_view.setRubberBand(QChartView.RubberBand.RectangleRubberBand)
+        chart_view.setDragMode(QChartView.DragMode.ScrollHandDrag)
 
         # Add chart view to layout
         layout.addWidget(chart_view)
@@ -65,8 +68,8 @@ class LineChart(QWidget):
         self.axis_x = QValueAxis()
         self.axis_y = QValueAxis()
         self.axis_y.setRange(0.0, 100.0)
-        self.chart.addAxis(self.axis_x, Qt.AlignBottom)
-        self.chart.addAxis(self.axis_y, Qt.AlignLeft)
+        self.chart.addAxis(self.axis_x, Qt.AlignmentFlag.AlignBottom)
+        self.chart.addAxis(self.axis_y, Qt.AlignmentFlag.AlignLeft)
 
     def add_series(self, series: QLineSeries):
         """Adds a line series to the chart"""
@@ -82,7 +85,10 @@ class LineChart(QWidget):
         self.chart.legend().setVisible(True)
 
     def add_horizontal_line(
-        self, value: float, name: str = "Level", color: Qt.GlobalColor = Qt.red
+        self,
+        value: float,
+        name: str = "Level",
+        color: Qt.GlobalColor = Qt.GlobalColor.red,
     ):
         """Helper method to add a horizontal line"""
         h_line = HorizontalLine(value, name, color)

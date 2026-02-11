@@ -6,6 +6,7 @@ All datastreamer should inherit from DataStreamer.
 from typing import Optional
 import pandas as pd
 
+
 class DataStreamer:
     """A data streamer abstract class"""
 

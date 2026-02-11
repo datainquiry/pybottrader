@@ -5,6 +5,7 @@ A basic strategy based on crossover moving averages
 from ..indicators import MA
 from .base import Strategy, StrategySignal, Position
 
+
 class CrossOver(Strategy):
     """
     A basic strategy based on crossover moving averages. Buys when the

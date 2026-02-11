@@ -8,7 +8,7 @@ parameters of a strategy.
 # from typing import Any, Dict, Type, Callable
 from typing import Any, Dict, Type
 import inspect
-from PyQt5.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget,
     #     QVBoxLayout,
     QFormLayout,
@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (
     QDoubleSpinBox,
 )
 
-# from PyQt5.QtCore import pyqtSignal
+# from PyQt6.QtCore import pyqtSignal
 from ..strategies import Strategy
 
 

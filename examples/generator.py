@@ -2,16 +2,27 @@
 
 import sys
 from typing import Type
-from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QHBoxLayout,
-)
+
+# Check if UI components are available before importing
+try:
+    from PyQt6.QtWidgets import (
+        QApplication,
+        QMainWindow,
+        QWidget,
+        QHBoxLayout,
+    )
+    from pybottrader.ui.line import LineSeries, LineChart
+    from pybottrader.ui.formfactory import TraderFormFactory
+
+    UI_AVAILABLE = True
+except ImportError as e:
+    print("UI components not available. Install with: pip install pybottrader[ui]")
+    print(f"Import error: {e}")
+    UI_AVAILABLE = False
+    sys.exit(1)
+
 from pybottrader.strategies.simplersi import SimpleRSIStrategy
 from pybottrader.datastreamers.yfinance import YFHistory
-from pybottrader.ui.line import LineSeries, LineChart
-from pybottrader.ui.formfactory import TraderFormFactory
 from pybottrader.portfolios import DummyPortfolio
 from pybottrader.traders import Trader
 
@@ -59,4 +70,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = BaseWindow(strategy_class=SimpleRSIStrategy, data_class=YFHistory)
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
