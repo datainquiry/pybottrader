@@ -86,6 +86,10 @@ Time                      Pos.      Price        ROI   Valuation  Accum.ROI
 2023-10-12 00:00:00-04:00 SELL     179.59       1.18%     990.78      -0.92%
 ```
 
+## Requirements
+
+- Python 3.12 or higher
+
 ## Installation
 
 ```sh
