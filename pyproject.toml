@@ -1,19 +1,21 @@
 [project]
 name = "pybottrader"
-version = "0.0.9"
+version = "0.1.0"
 readme = "README.md"
 description = "An experimental Python library to implement trading bots"
 license = {file = "LICENSE"}
 keywords = ["trading", "bots", "finance"]
 dependencies = [
-    "attrs==25.4.0",
-    "numpy==2.4.1",
-    "pandas==3.0.0",
-    "requests==2.32.5",
-    "coinbase-advanced-py==1.8.2",
-    "yfinance==1.1.0",
-    "pybind11==3.0.1",
-    "twine==6.2.0",
+    "attrs~=25.4",
+    "numpy~=2.4",
+    "pandas~=2.3",
+    "requests~=2.32",
+    "coinbase-advanced-py~=1.8",
+    "yfinance~=1.1",
+    "pybind11~=3.0",
+    "twine~=6.2",
+    "PyQt5",
+    "PyQtChart",
 ]
 
 [project.urls]
